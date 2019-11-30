@@ -35,3 +35,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 Assets/Resources/VuforiaConfiguration.asset
+Assets/Resources/VuforiaConfiguration.asset.meta
