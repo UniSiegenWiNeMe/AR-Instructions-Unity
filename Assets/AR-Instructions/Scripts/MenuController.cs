@@ -15,13 +15,44 @@ public class MenuController : MonoBehaviour
     public GameObject PhotoPanel;
     public GameObject MainPanel;
     public GameObject MarkerPanel;
-        public GameObject[] GameObjectsToHide;
+    public GameObject[] GameObjectsToHide;
 
     private MenuMode _mode;
     private string _instructionName;
     private InstructionManagerSingleton _instructionManager;
     private GameObject _containerForSpawnedItems;
     private bool _visbility = true;
+
+    public void Init(MenuMode mode, GameObject containerForSpawnedItems, Instruction instruction)
+    {
+        _mode = mode;
+        _containerForSpawnedItems = containerForSpawnedItems;
+        _instructionName = instruction.Name;
+        _instructionManager = InstructionManagerSingleton.Instance;
+
+        var vumark = GameObject.Find("VuMark");
+
+#if UNITY_EDITOR
+        SetMode(_mode);
+        return;
+#endif
+        if (vumark)
+        {
+            var stabilizedTracking = vumark.GetComponentInChildren<StabilizedTracking>();
+
+            if (stabilizedTracking)
+            {
+                if (stabilizedTracking.IsMarkerScanned)
+                {
+                    SetMode(_mode);
+                }
+                else
+                {
+                    stabilizedTracking.MarkerScanned += StabilizedTracking_MarkerScanned;
+                }
+            }
+        }
+    }
 
     public void Init(MenuMode mode, GameObject containerForSpawnedItems, string instructionName = null)
     {

@@ -13,7 +13,7 @@ public class ShowSelectionMenu : MonoBehaviour
     {
         var menu = Instantiate(SelectionMenu);
         menu.transform.position = transform.position;
-        menu.GetComponent<SelectInstructionMenuController>().Init(MenuMode.Replay);
+        //menu.GetComponent<SelectInstructionMenuController>().Init(MenuMode.Replay);
     }
 
     /// <summary>
@@ -23,6 +23,6 @@ public class ShowSelectionMenu : MonoBehaviour
     {
         var menu = Instantiate(SelectionMenu);
         menu.transform.position = transform.position;
-        menu.GetComponent<SelectInstructionMenuController>().Init(MenuMode.Edit);
+        //menu.GetComponent<SelectInstructionMenuController>().Init(MenuMode.Edit);
     }
 }

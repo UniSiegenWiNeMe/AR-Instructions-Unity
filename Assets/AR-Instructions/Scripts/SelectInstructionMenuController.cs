@@ -1,4 +1,5 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ public class SelectInstructionMenuController : MonoBehaviour
     public GameObject NextPageButton;
     public GameObject PreviousPageButton;
     public GameObject CreateNewInstructionButton;
-    public GameObject LoadFromTemplate;
+    public GameObject ImportButton;
 
     private int currentPage = 1;
     private int _maxPageNumber;
@@ -49,21 +50,28 @@ public class SelectInstructionMenuController : MonoBehaviour
         PreviousPageButton.SetActive(false);
     }
 
-    public void Init(MenuMode mode)
+    public void SetEditMode(bool mode)
     {
-        _mode = mode;
-
-        CreateNewInstructionButton.SetActive((_mode == MenuMode.Record ||_mode == MenuMode.Edit)? true : false);
-        LoadFromTemplate.SetActive((_mode == MenuMode.Record || _mode == MenuMode.Edit) ? true : false);
+        foreach (Transform item in ItemParent.transform)
+        {
+            item.gameObject.GetComponent<MenuItemController>().SetMode(mode);
+        }
     }
+    //public void Init(MenuMode mode)
+    //{
+    //    _mode = mode;
+
+    //    CreateNewInstructionButton.SetActive((_mode == MenuMode.Record ||_mode == MenuMode.Edit)? true : false);
+    //    ImportButton.SetActive((_mode == MenuMode.Record || _mode == MenuMode.Edit) ? true : false);
+    //}
 
     private void LoadItemsToMenu(IEnumerable<string> items, bool clearBeforeLoad = false)
     {
         if(clearBeforeLoad)
         {
-            foreach (Transform child in ItemParent.transform)
-            {
-                Destroy(child.gameObject);
+            while (ItemParent.transform.childCount > 0)
+            {                
+                DestroyImmediate(ItemParent.transform.GetChild(0).gameObject);
             }
         }
 
@@ -72,18 +80,17 @@ public class SelectInstructionMenuController : MonoBehaviour
             var instruction = SaveLoadManager.Instance.Load(item);
 
             var itemGameObject = Instantiate(ItemPrefab, ItemParent.transform);
-            itemGameObject.GetComponentInChildren<ShowInstructionMenu>().InstructionName = item;
-            itemGameObject.GetComponentInChildren<ShowInstructionMenu>().EditMode = _mode == MenuMode.Edit ? true : false;
+            //itemGameObject.GetComponentInChildren<ShowInstructionMenu>().InstructionName = item;
+            //itemGameObject.GetComponentInChildren<ShowInstructionMenu>().EditMode = _mode == MenuMode.Edit ? true : false;
 
-            string itemText = instruction.Name; 
-            if (instruction.Name.Length >  NumberOfCharsToShow)
-            {
-                itemText = itemText.Substring(0, NumberOfCharsToShow).TrimEnd('.') + "...";
-            }
+            
+            itemGameObject.GetComponent<MenuItemController>().SetInstruction(instruction);
+            itemGameObject.GetComponent<MenuItemController>().SelectionMenu = gameObject;
 
-            itemGameObject.GetComponent<TextMeshPro>().text = itemText;
-            itemGameObject.GetComponentInChildren<Interactable>().OnClick.AddListener(OnSelect);
+            //itemGameObject.GetComponent<TextMeshPro>().text = itemText;
+            //itemGameObject.GetComponentInChildren<Interactable>().OnClick.AddListener(OnSelect);
         }
+        ItemParent.GetComponent<GridObjectCollection>()?.UpdateCollection();
     }
 
     public void OnNextPage()

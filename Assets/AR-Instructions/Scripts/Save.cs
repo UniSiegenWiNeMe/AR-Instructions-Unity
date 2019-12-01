@@ -11,7 +11,7 @@ public class Instruction
     public List<Step> Steps = new List<Step>();
     public String Name;
     public DateTime DateCreated;
-   
+    public bool Deleted;
 
     public int StepsCount {
         get
@@ -25,7 +25,7 @@ public class Instruction
         Name = name;
         DateCreated = dateCreated;
         Steps = new List<Step>();
-
+        Deleted = false;
     }
 
     public Instruction()
@@ -33,6 +33,7 @@ public class Instruction
         Name = "default";
         DateCreated = DateTime.Now;
         Steps = new List<Step>();
+        Deleted = false;
     }
 }
 
