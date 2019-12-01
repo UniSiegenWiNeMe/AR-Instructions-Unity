@@ -34,33 +34,26 @@ public class LoadInstructionFromTemplate : MonoBehaviour
 
         UnityEngine.WSA.Application.InvokeOnUIThread(async () =>
         {
-        try
-        {
-            Debug.Log("path:" + path);
-            openPicker = new FileOpenPicker();
-            openPicker.ViewMode = PickerViewMode.Thumbnail;
-            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            openPicker.FileTypeFilter.Add(".zip");
-
-            StorageFile file = await openPicker.PickSingleFileAsync();
-            if(file!= null)
+            try
             {
-                await file.CopyAsync(Windows.Storage.ApplicationData.Current.LocalCacheFolder, file.Name, NameCollisionOption.ReplaceExisting);
-                await load(file, path);
-            }        
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Error in Import: " + ex.ToString());
-        }
+                openPicker = new FileOpenPicker();
+                openPicker.ViewMode = PickerViewMode.Thumbnail;
+                openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                openPicker.FileTypeFilter.Add(".zip");
 
-        Debug.Log("instruction loaded");
-        //GetComponentInChildren<ShowInstructionMenu>().InstructionName = InstructionManagerSingleton.Instance.Instruction.Name;
-        //GetComponentInChildren<ShowInstructionMenu>().EditMode = true;
-        InstructionLoaded?.Invoke();
-        Debug.Log("Event invoked");
+                StorageFile file = await openPicker.PickSingleFileAsync();
+                if(file!= null)
+                {
+                    await file.CopyAsync(Windows.Storage.ApplicationData.Current.LocalCacheFolder, file.Name, NameCollisionOption.ReplaceExisting);
+                    await load(file, path);
+                }        
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError("Error in Import: " + ex.ToString());
+            }
 
-
+            InstructionLoaded?.Invoke();
         }, false);
 
 #elif UNITY_EDITOR
@@ -68,7 +61,6 @@ public class LoadInstructionFromTemplate : MonoBehaviour
 
         GetComponentInChildren<ShowInstructionMenu>().InstructionName = InstructionManagerSingleton.Instance.Instruction.Name;
         GetComponentInChildren<ShowInstructionMenu>().EditMode = true;
-        //InstructionManagerSingleton.Instance.LoadFromTemplate(lines, "test");
         InstructionLoaded?.Invoke();
 #endif
 
@@ -78,86 +70,48 @@ public class LoadInstructionFromTemplate : MonoBehaviour
 
     private async Task load(StorageFile file, string path)
     {
-            if(!Directory.Exists(Path.Combine(path, "media")))
-            {
-                Directory.CreateDirectory(Path.Combine(path, "media"));
-            }
-
-            using (ZipArchive archive = ZipFile.OpenRead(Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path, file.Name)))
-            {
-                foreach (var entry in archive.Entries)
-                {
-                    Debug.Log(Path.Combine(path, entry.FullName));
-                    if (File.Exists(Path.Combine(path, entry.FullName)))
-                    {
-                        File.Delete(Path.Combine(path, entry.FullName));
-                    }
-                
-                    try
-                    {
-                        entry.ExtractToFile(Path.Combine(path, entry.FullName), true);
-                        //archive.ExtractToDirectory(path1);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.Log(ex.ToString());
-                    }
-
-                }
-
-                
-            }
-    UnityMainThreadDispatcher.Instance().Enqueue(() =>
+        if(!Directory.Exists(Path.Combine(path, "media")))
         {
-    var instructionFullPath = Path.Combine(path,file.DisplayName + ".save");
-    Debug.Log(instructionFullPath);
-    if (File.Exists(instructionFullPath))
+            Directory.CreateDirectory(Path.Combine(path, "media"));
+        }
+
+        using (ZipArchive archive = ZipFile.OpenRead(Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path, file.Name)))
+        {
+            foreach (var entry in archive.Entries)
             {
-    Debug.Log("file is da");
+                if (File.Exists(Path.Combine(path, entry.FullName)))
+                {
+                    File.Delete(Path.Combine(path, entry.FullName));
+                }
+                
+                try
+                {
+                    entry.ExtractToFile(Path.Combine(path, entry.FullName), true);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Log(ex.ToString());
+                }
+            }
+        }
+    
+        UnityMainThreadDispatcher.Instance().Enqueue(() =>
+        {
+            var instructionFullPath = Path.Combine(path,file.DisplayName + ".save");
+            if (File.Exists(instructionFullPath))
+            {
                 var serializer = new XmlSerializer(typeof(Instruction));
                 var stream = new FileStream(instructionFullPath, FileMode.Open);
                 var save = (Instruction)serializer.Deserialize(stream);
-
-    Debug.Log(save != null? "save is da": "kein save :(");
-                //stream.Close();
                 stream.Flush();
                 stream.Dispose();
-
                 InstructionManagerSingleton.Instance.Instruction = save;
             }
             else
             {
                 //return null;
             }
-    });
-        
-        //XmlSerializer serializer = new XmlSerializer(typeof(Instruction));
-        //using (Stream reader = new FileStream(instructionFullPath, FileMode.Open))
-        //{
-        //    // Call the Deserialize method to restore the object's state.
-        //    var Instruction = (Instruction)serializer.Deserialize(reader);
-        //    InstructionManagerSingleton.Instance.Instruction = Instruction;
-        //}
-
-        //UnityMainThreadDispatcher.Instance().Enqueue(() =>
-        //{
-        //    if (file != null)
-        //    {
-        //        // Application now has read/write access to the picked file
-        //        var lines = ReadFile(Path.Combine(Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path, file.Name));
-
-        //        GetComponentInChildren<ShowInstructionMenu>().InstructionName = file.DisplayName;
-        //        GetComponentInChildren<ShowInstructionMenu>().EditMode = true;
-        //        InstructionManagerSingleton.Instance.LoadFromTemplate(lines, file.DisplayName);
-        //        InstructionLoaded?.Invoke();
-
-        //    }
-        //    else
-        //    {
-        //        // The picker was dismissed with no selected file
-        //        Debug.Log("File picker operation cancelled");
-        //    }
-        //});
+        });
     }
 
 #endif
