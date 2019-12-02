@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using TMPro;
@@ -11,8 +12,10 @@ public class MenuItemController : MonoBehaviour
     public GameObject RemoveButton;
     public TextMeshPro Label;
     public bool EditMode = false;
-    public GameObject InstructionMenu;
-    public GameObject SelectionMenu;
+    public GameObject InstructionMenuPrefab;
+
+    public event EventHandler<InstructionSelectionEventArgs> InstructionSelected;
+
 
     private Instruction _instruction;
     private GameObject ContainerForSpawnedItems;
@@ -40,25 +43,20 @@ public class MenuItemController : MonoBehaviour
     }
 
 
-    public void ShowInstrcutionMenu()
+    public void Selected()
     {
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>
-        {
-            if (ContainerForSpawnedItems == null)
-            {
-                ContainerForSpawnedItems = GameObject.Find("Container");
-            }
+        InstructionManager.Instance.Instruction = _instruction;
 
-            var menu = Instantiate(InstructionMenu);
-            menu.transform.position = transform.position;
-            if (!_instruction.Name.EndsWith(".save"))
-            {
-                _instruction.Name = Path.Combine(Application.persistentDataPath, _instruction.Name + ".save");
-            }
+        InstructionSelected?.Invoke(this, new InstructionSelectionEventArgs(_instruction));
+    }
+}
 
-            menu.GetComponent<MenuController>().Init(EditMode ? MenuMode.Edit : MenuMode.Replay, ContainerForSpawnedItems, _instruction);
+public class InstructionSelectionEventArgs:EventArgs
+{
+    public Instruction SelectedInstruction { get; set; }
 
-            SelectionMenu.SetActive(false);
-        });
+    public InstructionSelectionEventArgs(Instruction selectedInstruction)
+    {
+        SelectedInstruction = selectedInstruction;
     }
 }

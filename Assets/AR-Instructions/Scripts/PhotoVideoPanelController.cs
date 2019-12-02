@@ -158,7 +158,7 @@ public class PhotoVideoPanelController : MonoBehaviour
     private void NewData()
     {
         OnNewData?.Invoke();
-        InstructionManagerSingleton.Instance.Save();
+        InstructionManager.Instance.Save();
     }
 
     private void SetMediaFileCounter(int currentMediaIndex, int count)
@@ -201,7 +201,7 @@ public class PhotoVideoPanelController : MonoBehaviour
             LoadPreivousMediaFile();
         }
         OnNewData?.Invoke();
-        InstructionManagerSingleton.Instance.Save();
+        InstructionManager.Instance.Save();
 
         //if (_currentMediaIndex > 0)
         //{

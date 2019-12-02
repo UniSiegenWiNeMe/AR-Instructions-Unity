@@ -4,13 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InstructionManagerSingleton : Singleton<InstructionManagerSingleton>
+public class InstructionManager : Singleton<InstructionManager>
 {
 
     /// <summary>
     /// Object to store all information about the instruction
     /// </summary>
-    public Instruction Instruction { get; private set; }
+    public Instruction Instruction { get; set; }
 
     /// <summary>
     /// Instruction text of the current selected step
@@ -202,6 +202,13 @@ public class InstructionManagerSingleton : Singleton<InstructionManagerSingleton
     public void Save(bool sync = false, string path = null)
     {
         SaveLoadManager.Instance.Save(Instruction, sync, path);
+    }
+
+    public void Reset()
+    {
+        Instruction = null;
+        CurrentStepNumber = 0;
+        _toolTipTextCounter = 1;
     }
     
 }

@@ -10,60 +10,61 @@ using UnityEngine;
 
 public class SelectInstructionMenuController : MonoBehaviour
 {
-    private MenuMode _mode;
-    List<string> allInstructionFiles;
-    public int NumberOfItemsToShow = 5;
-    public int NumberOfCharsToShow = 15;
+    public MenuMode Mode { get; private set; }
+
     public GameObject ItemParent;
     public GameObject ItemPrefab;
+    public int NumberOfItemsToShow = 6;
 
     public TextMeshPro PageCounterText;
     public GameObject NextPageButton;
     public GameObject PreviousPageButton;
-    public GameObject CreateNewInstructionButton;
-    public GameObject ImportButton;
 
-    private int currentPage = 1;
+    public Interactable CreateNewInstructionInteractable;
+    public Interactable ImportInstructionInteractable;
+
+    public event EventHandler<InstructionSelectionEventArgs> InstructionSelected;
+
+    private int _currentPage = 1;
     private int _maxPageNumber;
+    private List<string> _allInstructionFiles;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        allInstructionFiles = GetAllInstructionFiles();
+        Mode = MenuMode.Replay;
 
-        var items = allInstructionFiles.Take(NumberOfItemsToShow);
+        _allInstructionFiles = GetAllInstructionFiles();
+
+        var items = _allInstructionFiles.Take(NumberOfItemsToShow);
         LoadItemsToMenu(items);
 
         if (PageCounterText != null)
         {
-            _maxPageNumber = (allInstructionFiles.Count / NumberOfItemsToShow);
-            if(allInstructionFiles.Count%NumberOfItemsToShow != 0)
+            _maxPageNumber = (_allInstructionFiles.Count / NumberOfItemsToShow);
+            if(_allInstructionFiles.Count%NumberOfItemsToShow != 0)
             {
                 _maxPageNumber++;
             }
 
-            PageCounterText.text = currentPage + "/" + _maxPageNumber;
+            PageCounterText.text = _currentPage + "/" + _maxPageNumber;
         }
 
-        NextPageButton.SetActive(allInstructionFiles.Count > NumberOfItemsToShow);
+        NextPageButton.SetActive(_allInstructionFiles.Count > NumberOfItemsToShow);
         PreviousPageButton.SetActive(false);
     }
 
     public void SetEditMode(bool mode)
     {
+        Mode = mode ? MenuMode.Edit : MenuMode.Replay;
+
         foreach (Transform item in ItemParent.transform)
         {
             item.gameObject.GetComponent<MenuItemController>().SetMode(mode);
         }
     }
-    //public void Init(MenuMode mode)
-    //{
-    //    _mode = mode;
-
-    //    CreateNewInstructionButton.SetActive((_mode == MenuMode.Record ||_mode == MenuMode.Edit)? true : false);
-    //    ImportButton.SetActive((_mode == MenuMode.Record || _mode == MenuMode.Edit) ? true : false);
-    //}
 
     private void LoadItemsToMenu(IEnumerable<string> items, bool clearBeforeLoad = false)
     {
@@ -78,44 +79,42 @@ public class SelectInstructionMenuController : MonoBehaviour
         foreach (var item in items)
         {
             var instruction = SaveLoadManager.Instance.Load(item);
-
             var itemGameObject = Instantiate(ItemPrefab, ItemParent.transform);
-            //itemGameObject.GetComponentInChildren<ShowInstructionMenu>().InstructionName = item;
-            //itemGameObject.GetComponentInChildren<ShowInstructionMenu>().EditMode = _mode == MenuMode.Edit ? true : false;
-
-            
             itemGameObject.GetComponent<MenuItemController>().SetInstruction(instruction);
-            itemGameObject.GetComponent<MenuItemController>().SelectionMenu = gameObject;
-
-            //itemGameObject.GetComponent<TextMeshPro>().text = itemText;
-            //itemGameObject.GetComponentInChildren<Interactable>().OnClick.AddListener(OnSelect);
+            itemGameObject.GetComponent<MenuItemController>().InstructionSelected += SelectInstructionMenuController_InstructionSelected;
+            
         }
         ItemParent.GetComponent<GridObjectCollection>()?.UpdateCollection();
     }
 
+    private void SelectInstructionMenuController_InstructionSelected(object sender, InstructionSelectionEventArgs e)
+    {
+        InstructionSelected?.Invoke(sender, e);
+    }
+
     public void OnNextPage()
     {
-        var items = allInstructionFiles.Skip(currentPage * NumberOfItemsToShow).Take(NumberOfItemsToShow);
+        var items = _allInstructionFiles.Skip(_currentPage * NumberOfItemsToShow).Take(NumberOfItemsToShow);
         LoadItemsToMenu(items,true);
 
         PreviousPageButton.SetActive(true);
-        currentPage++;
-        if (currentPage * NumberOfItemsToShow >= allInstructionFiles.Count)
+        _currentPage++;
+        if (_currentPage * NumberOfItemsToShow >= _allInstructionFiles.Count)
         {
             NextPageButton.SetActive(false);
         }
-        PageCounterText.text = currentPage + "/" + _maxPageNumber;
+        PageCounterText.text = _currentPage + "/" + _maxPageNumber;
     }
 
     public void OnPreviousPage()
     {
-        currentPage--;
-        var items = allInstructionFiles.Skip((currentPage-1) * NumberOfItemsToShow).Take(NumberOfItemsToShow);
+        _currentPage--;
+        var items = _allInstructionFiles.Skip((_currentPage-1) * NumberOfItemsToShow).Take(NumberOfItemsToShow);
         LoadItemsToMenu(items, true);
 
         NextPageButton.SetActive(true);
 
-        if (currentPage > 1)
+        if (_currentPage > 1)
         {
             PreviousPageButton.SetActive(true);
         }
@@ -123,13 +122,9 @@ public class SelectInstructionMenuController : MonoBehaviour
         {
             PreviousPageButton.SetActive(false);
         }
-        PageCounterText.text = currentPage + "/" + _maxPageNumber;
+        PageCounterText.text = _currentPage + "/" + _maxPageNumber;
     }
 
-    private void OnSelect()
-    {
-        gameObject.SetActive(false);
-    }
 
     private List<string> GetAllInstructionFiles()
     {

@@ -18,17 +18,15 @@ public class MenuController : MonoBehaviour
     public GameObject[] GameObjectsToHide;
 
     private MenuMode _mode;
-    private string _instructionName;
-    private InstructionManagerSingleton _instructionManager;
+    private InstructionManager _instructionManager;
     private GameObject _containerForSpawnedItems;
-    private bool _visbility = true;
+    private bool _visbility;
 
-    public void Init(MenuMode mode, GameObject containerForSpawnedItems, Instruction instruction)
+    public void Init(MenuMode mode, GameObject containerForSpawnedItems)
     {
         _mode = mode;
         _containerForSpawnedItems = containerForSpawnedItems;
-        _instructionName = instruction.Name;
-        _instructionManager = InstructionManagerSingleton.Instance;
+        _instructionManager = InstructionManager.Instance;
 
         var vumark = GameObject.Find("VuMark");
 
@@ -58,8 +56,7 @@ public class MenuController : MonoBehaviour
     {
         _mode = mode;
         _containerForSpawnedItems = containerForSpawnedItems;
-        _instructionName = instructionName;
-        _instructionManager = InstructionManagerSingleton.Instance;
+        _instructionManager = InstructionManager.Instance;
 
         var vumark = GameObject.Find("VuMark");
 
@@ -97,9 +94,7 @@ public class MenuController : MonoBehaviour
         PhotoPanel.GetComponent<PhotoVideoPanelController>().SetMode(mode);
 
         MainPanel.SetActive(true);
-        MainPanel.GetComponent<MainPanelController>().Init(mode, _containerForSpawnedItems, _instructionName);
-
-        
+        MainPanel.GetComponent<MainPanelController>().Init(mode, _containerForSpawnedItems);
 
         if (mode == MenuMode.Record || _mode == MenuMode.Edit)
         {

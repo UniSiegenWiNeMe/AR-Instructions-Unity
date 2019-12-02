@@ -56,13 +56,47 @@ public class MainPanelController : MonoBehaviour
     /// Mode of the menu
     /// </summary>
     private MenuMode _mode;
-    private InstructionManagerSingleton _instructionManager;
+    private InstructionManager _instructionManager;
 
+    public void Init(MenuMode mode, GameObject ContainerForSpawnedItems)
+    {
+        _mode = mode;
+        _instructionManager = InstructionManager.Instance;
+        this.ContainerForSpawnedItems = ContainerForSpawnedItems;
+
+        if (_mode == MenuMode.Record || _mode == MenuMode.Edit)
+        {
+            if (_mode == MenuMode.Edit)
+            {
+                LoadStep(_instructionManager.GetCurrentStep());
+            }
+            else
+            {
+                //_instructionManager.CreateNewInstruction(InstructionName, DateTime.Now);
+            }
+
+            NextStepButton.SetActive(true);
+
+            Keyboard.TextTyped.AddListener(NewText);
+        }
+        else
+        {
+            InsertTextButton.SetActive(false);
+            FinishButton.SetActive(false);
+
+            LoadStep(_instructionManager.GetCurrentStep());
+            if (!_instructionManager.NextStepAvailabe())
+            {
+                NextStepButton.SetActive(false);
+            }
+        }
+        PreviousStepButton.SetActive(false);
+    }
 
     public void Init(MenuMode mode, GameObject ContainerForSpawnedItems, string InstructionName = null)
     {
         _mode = mode;
-        _instructionManager = InstructionManagerSingleton.Instance;
+        _instructionManager = InstructionManager.Instance;
         this.ContainerForSpawnedItems = ContainerForSpawnedItems;
 
         if (_mode == MenuMode.Record || _mode == MenuMode.Edit)
