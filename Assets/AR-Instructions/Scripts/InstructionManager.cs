@@ -2,10 +2,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class InstructionManager : Singleton<InstructionManager>
 {
+    private List<string> _allFileNames;
+
+    public List<string> AllFileNames
+    {
+        get
+        {
+            if (_allFileNames == null)
+            {
+                _allFileNames = GetAllInstructionFiles();
+            }
+            return _allFileNames;
+        }
+    }
+    public int Count
+    {
+        get
+        {
+            return AllFileNames.Count;
+        }
+    }
 
     /// <summary>
     /// Object to store all information about the instruction
@@ -35,6 +57,20 @@ public class InstructionManager : Singleton<InstructionManager>
     /// Number for the "tool tips" at the holograms
     /// </summary>
     private int _toolTipTextCounter = 1;
+
+    internal void Remove(string name)
+    {
+        _allFileNames.Remove(name);
+        foreach (var fileName in _allFileNames)
+        {
+            var tmp = fileName.Substring(fileName.LastIndexOf("\\") + 1, fileName.LastIndexOf(".") - fileName.LastIndexOf("\\") - 1);
+            if (tmp == name)
+            {
+                _allFileNames.Remove(fileName);
+                return;
+            }
+        }
+    }
 
     /// <summary>
     /// Creates an new instruction object
@@ -210,5 +246,20 @@ public class InstructionManager : Singleton<InstructionManager>
         CurrentStepNumber = 0;
         _toolTipTextCounter = 1;
     }
-    
+
+    public List<string> GetAllInstructionFiles()
+    {
+        var files = Directory.GetFiles(Application.persistentDataPath, "*save").ToList();
+
+        files.Sort();
+
+        
+        return files;
+    }
+
+    public IEnumerable<string> GetInstructionNames(int skip, int take)
+    {
+        return AllFileNames.Skip(skip).Take(take);
+    }
+
 }

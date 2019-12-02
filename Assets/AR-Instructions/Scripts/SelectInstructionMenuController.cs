@@ -27,7 +27,6 @@ public class SelectInstructionMenuController : MonoBehaviour
 
     private int _currentPage = 1;
     private int _maxPageNumber;
-    private List<string> _allInstructionFiles;
 
 
 
@@ -36,15 +35,14 @@ public class SelectInstructionMenuController : MonoBehaviour
     {
         Mode = MenuMode.Replay;
 
-        _allInstructionFiles = GetAllInstructionFiles();
-
-        var items = _allInstructionFiles.Take(NumberOfItemsToShow);
+        
+        var items = InstructionManager.Instance.GetInstructionNames(0, NumberOfItemsToShow);
         LoadItemsToMenu(items);
 
         if (PageCounterText != null)
         {
-            _maxPageNumber = (_allInstructionFiles.Count / NumberOfItemsToShow);
-            if(_allInstructionFiles.Count%NumberOfItemsToShow != 0)
+            _maxPageNumber = (InstructionManager.Instance.Count / NumberOfItemsToShow);
+            if(InstructionManager.Instance.Count % NumberOfItemsToShow != 0)
             {
                 _maxPageNumber++;
             }
@@ -52,7 +50,7 @@ public class SelectInstructionMenuController : MonoBehaviour
             PageCounterText.text = _currentPage + "/" + _maxPageNumber;
         }
 
-        NextPageButton.SetActive(_allInstructionFiles.Count > NumberOfItemsToShow);
+        NextPageButton.SetActive(InstructionManager.Instance.Count > NumberOfItemsToShow);
         PreviousPageButton.SetActive(false);
     }
 
@@ -80,11 +78,26 @@ public class SelectInstructionMenuController : MonoBehaviour
         {
             var instruction = SaveLoadManager.Instance.Load(item);
             var itemGameObject = Instantiate(ItemPrefab, ItemParent.transform);
+            itemGameObject.gameObject.GetComponent<MenuItemController>().SetMode(Mode == MenuMode.Replay ? false: true );
             itemGameObject.GetComponent<MenuItemController>().SetInstruction(instruction);
             itemGameObject.GetComponent<MenuItemController>().InstructionSelected += SelectInstructionMenuController_InstructionSelected;
-            
+            itemGameObject.GetComponent<MenuItemController>().InstructionRemoved += SelectInstructionMenuController_InstructionRemoved;
+
         }
         ItemParent.GetComponent<GridObjectCollection>()?.UpdateCollection();
+    }
+
+    private void SelectInstructionMenuController_InstructionRemoved(object sender, InstructionSelectionEventArgs e)
+    {
+        RefreshPage();
+    }
+
+    public void RefreshPage()
+    {
+        var items = InstructionManager.Instance.GetInstructionNames((_currentPage-1) * NumberOfItemsToShow, NumberOfItemsToShow);
+        LoadItemsToMenu(items, true);
+        
+        //Update page counter
     }
 
     private void SelectInstructionMenuController_InstructionSelected(object sender, InstructionSelectionEventArgs e)
@@ -94,12 +107,12 @@ public class SelectInstructionMenuController : MonoBehaviour
 
     public void OnNextPage()
     {
-        var items = _allInstructionFiles.Skip(_currentPage * NumberOfItemsToShow).Take(NumberOfItemsToShow);
+        var items = InstructionManager.Instance.GetInstructionNames(_currentPage * NumberOfItemsToShow, NumberOfItemsToShow);
         LoadItemsToMenu(items,true);
 
         PreviousPageButton.SetActive(true);
         _currentPage++;
-        if (_currentPage * NumberOfItemsToShow >= _allInstructionFiles.Count)
+        if (_currentPage * NumberOfItemsToShow >= InstructionManager.Instance.Count)
         {
             NextPageButton.SetActive(false);
         }
@@ -109,7 +122,7 @@ public class SelectInstructionMenuController : MonoBehaviour
     public void OnPreviousPage()
     {
         _currentPage--;
-        var items = _allInstructionFiles.Skip((_currentPage-1) * NumberOfItemsToShow).Take(NumberOfItemsToShow);
+        var items = InstructionManager.Instance.GetInstructionNames(_currentPage-1 * NumberOfItemsToShow, NumberOfItemsToShow);
         LoadItemsToMenu(items, true);
 
         NextPageButton.SetActive(true);
@@ -124,15 +137,7 @@ public class SelectInstructionMenuController : MonoBehaviour
         }
         PageCounterText.text = _currentPage + "/" + _maxPageNumber;
     }
-
-
-    private List<string> GetAllInstructionFiles()
-    {
-        var files = Directory.GetFiles(Application.persistentDataPath, "*save").ToList();
-
-        files.Sort();
-        return files;
-    }
+    
 }
 
 

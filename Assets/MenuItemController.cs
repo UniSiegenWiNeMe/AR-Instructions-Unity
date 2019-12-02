@@ -15,6 +15,7 @@ public class MenuItemController : MonoBehaviour
     public GameObject InstructionMenuPrefab;
 
     public event EventHandler<InstructionSelectionEventArgs> InstructionSelected;
+    public event EventHandler<InstructionSelectionEventArgs> InstructionRemoved;
 
 
     private Instruction _instruction;
@@ -48,6 +49,13 @@ public class MenuItemController : MonoBehaviour
         InstructionManager.Instance.Instruction = _instruction;
 
         InstructionSelected?.Invoke(this, new InstructionSelectionEventArgs(_instruction));
+    }
+
+    public void Removed()
+    {
+        InstructionManager.Instance.Remove(_instruction.Name);
+
+        InstructionRemoved?.Invoke(this, new InstructionSelectionEventArgs(_instruction));
     }
 }
 
