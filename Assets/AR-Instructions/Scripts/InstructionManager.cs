@@ -8,17 +8,17 @@ using UnityEngine;
 
 public class InstructionManager : Singleton<InstructionManager>
 {
-    private List<string> _allFileNames;
+    private List<string> _allFileFullNames;
 
     public List<string> AllFileNames
     {
         get
         {
-            if (_allFileNames == null)
+            if (_allFileFullNames == null)
             {
-                _allFileNames = GetAllInstructionFiles();
+                _allFileFullNames = GetAllInstructionFiles();
             }
-            return _allFileNames;
+            return _allFileFullNames;
         }
     }
     public int Count
@@ -60,16 +60,48 @@ public class InstructionManager : Singleton<InstructionManager>
 
     internal void Remove(string name)
     {
-        _allFileNames.Remove(name);
-        foreach (var fileName in _allFileNames)
+        foreach (var fileName in _allFileFullNames)
         {
-            var tmp = fileName.Substring(fileName.LastIndexOf("\\") + 1, fileName.LastIndexOf(".") - fileName.LastIndexOf("\\") - 1);
+            string tmp = ExtractFileNameFromPath(fileName);
             if (tmp == name)
             {
-                _allFileNames.Remove(fileName);
+                MoveFileToDeleted(fileName);
+                _allFileFullNames.Remove(fileName);
                 return;
             }
         }
+    }
+
+    /// <summary>
+    /// filename is without extension.
+    /// </summary>
+    /// <param name="path">full path to file. with extension</param>
+    /// <returns></returns>
+    private static string ExtractFileNameFromPath(string path)
+    {
+        return path.Substring(path.LastIndexOf("\\") + 1, path.LastIndexOf(".") - path.LastIndexOf("\\") - 1);
+    }
+
+    private void MoveFileToDeleted(string fileName)
+    {
+        var binPath = Path.Combine(Application.persistentDataPath, "bin");
+
+        if (!Directory.Exists(binPath))
+        {
+            Directory.CreateDirectory(binPath);
+        }
+        try
+        {
+
+            File.Copy(fileName, Path.Combine(binPath, ExtractFileNameFromPath(fileName) + ".save"));
+            File.Delete(fileName);
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+
     }
 
     /// <summary>
@@ -82,6 +114,14 @@ public class InstructionManager : Singleton<InstructionManager>
         Instruction = null;
         Instruction = new Instruction(name, dateCreated);
         Instruction.Steps.Add(new Step(CurrentStepNumber));
+        Save();
+        UpdateFileNames();
+
+    }
+
+    private void UpdateFileNames()
+    {
+        _allFileFullNames = GetAllInstructionFiles();
     }
 
     /// <summary>

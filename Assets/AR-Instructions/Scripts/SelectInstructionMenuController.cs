@@ -68,9 +68,12 @@ public class SelectInstructionMenuController : MonoBehaviour
     {
         if(clearBeforeLoad)
         {
-            while (ItemParent.transform.childCount > 0)
-            {                
-                DestroyImmediate(ItemParent.transform.GetChild(0).gameObject);
+            for (int i = 0; i < ItemParent.transform.childCount; i++)
+            {
+                ItemParent.transform.GetChild(i).GetComponent<MenuItemController>().InstructionSelected -= SelectInstructionMenuController_InstructionSelected;
+                ItemParent.transform.GetChild(i).GetComponent<MenuItemController>().InstructionRemoved -= SelectInstructionMenuController_InstructionRemoved;
+                ItemParent.transform.GetChild(i).gameObject.SetActive(false);
+                Destroy(ItemParent.transform.GetChild(i).gameObject);
             }
         }
 
