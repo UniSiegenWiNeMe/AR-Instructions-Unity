@@ -114,7 +114,7 @@ public class InstructionManager : Singleton<InstructionManager>
         Instruction = null;
         Instruction = new Instruction(name, dateCreated);
         Instruction.Steps.Add(new Step(CurrentStepNumber));
-        Save();
+        Save(true, Application.persistentDataPath);
         UpdateFileNames();
 
     }
@@ -297,9 +297,22 @@ public class InstructionManager : Singleton<InstructionManager>
         return files;
     }
 
-    public IEnumerable<string> GetInstructionNames(int skip, int take)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="pageNumber">Zero based counting</param>
+    /// <param name="pageSize"></param>
+    /// <returns></returns>
+    public IEnumerable<string> GetInstructionNamesForPage(int pageNumber, int pageSize)
     {
-        return AllFileNames.Skip(skip).Take(take);
+        var skip = pageNumber * pageSize;
+        return AllFileNames.Skip(skip).Take(pageSize);
     }
+
+
+    //public IEnumerable<string> GetInstructionNames(int skip, int take)
+    //{
+    //    return AllFileNames.Skip(skip).Take(take);
+    //}
 
 }

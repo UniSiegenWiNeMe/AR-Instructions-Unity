@@ -36,7 +36,7 @@ public class SelectInstructionMenuController : MonoBehaviour
         Mode = MenuMode.Replay;
 
         
-        var items = InstructionManager.Instance.GetInstructionNames(0, NumberOfItemsToShow);
+        var items = InstructionManager.Instance.GetInstructionNamesForPage(0, NumberOfItemsToShow);
         LoadItemsToMenu(items);
 
         if (PageCounterText != null)
@@ -97,10 +97,23 @@ public class SelectInstructionMenuController : MonoBehaviour
 
     public void RefreshPage()
     {
-        var items = InstructionManager.Instance.GetInstructionNames((_currentPage-1) * NumberOfItemsToShow, NumberOfItemsToShow);
+        if (_currentPage == _maxPageNumber && InstructionManager.Instance.Count % NumberOfItemsToShow == 0)
+        {
+            NextPageButton.SetActive(false);
+            _currentPage--;
+            if(_currentPage == 1)
+            {
+                PreviousPageButton.SetActive(false);
+            }
+        }
+
+        _maxPageNumber = InstructionManager.Instance.Count / NumberOfItemsToShow;
+        _maxPageNumber = InstructionManager.Instance.Count % NumberOfItemsToShow == 0 ? _maxPageNumber : _maxPageNumber + 1;
+
+        PageCounterText.text = _currentPage + "/" + _maxPageNumber;
+
+        var items = InstructionManager.Instance.GetInstructionNamesForPage(_currentPage - 1, NumberOfItemsToShow);
         LoadItemsToMenu(items, true);
-        
-        //Update page counter
     }
 
     private void SelectInstructionMenuController_InstructionSelected(object sender, InstructionSelectionEventArgs e)
@@ -110,11 +123,13 @@ public class SelectInstructionMenuController : MonoBehaviour
 
     public void OnNextPage()
     {
-        var items = InstructionManager.Instance.GetInstructionNames(_currentPage * NumberOfItemsToShow, NumberOfItemsToShow);
+        _currentPage++;
+        //var items = InstructionManager.Instance.GetInstructionNames((_currentPage+1) * NumberOfItemsToShow, NumberOfItemsToShow);
+        var items = InstructionManager.Instance.GetInstructionNamesForPage(_currentPage - 1,NumberOfItemsToShow);
+
         LoadItemsToMenu(items,true);
 
         PreviousPageButton.SetActive(true);
-        _currentPage++;
         if (_currentPage * NumberOfItemsToShow >= InstructionManager.Instance.Count)
         {
             NextPageButton.SetActive(false);
@@ -125,7 +140,7 @@ public class SelectInstructionMenuController : MonoBehaviour
     public void OnPreviousPage()
     {
         _currentPage--;
-        var items = InstructionManager.Instance.GetInstructionNames(_currentPage-1 * NumberOfItemsToShow, NumberOfItemsToShow);
+        var items = InstructionManager.Instance.GetInstructionNamesForPage(_currentPage - 1, NumberOfItemsToShow);
         LoadItemsToMenu(items, true);
 
         NextPageButton.SetActive(true);
