@@ -64,16 +64,17 @@ public class MainPanelController : MonoBehaviour
         _instructionManager = InstructionManager.Instance;
         this.ContainerForSpawnedItems = ContainerForSpawnedItems;
 
-        if (_mode == MenuMode.Record || _mode == MenuMode.Edit)
+        if (_mode == MenuMode.Record /*|| _mode == MenuMode.Edit*/)
         {
-            if (_mode == MenuMode.Edit)
-            {
-                LoadStep(_instructionManager.GetCurrentStep());
-            }
-            else
-            {
-                //_instructionManager.CreateNewInstruction(InstructionName, DateTime.Now);
-            }
+            LoadStep(_instructionManager.GetCurrentStep());
+            //if (_mode == MenuMode.Edit)
+            //{
+                
+            //}
+            //else
+            //{
+            //    //_instructionManager.CreateNewInstruction(InstructionName, DateTime.Now);
+            //}
 
             NextStepButton.SetActive(true);
 
@@ -93,44 +94,44 @@ public class MainPanelController : MonoBehaviour
         PreviousStepButton.SetActive(false);
     }
 
-    public void Init(MenuMode mode, GameObject ContainerForSpawnedItems, string InstructionName = null)
-    {
-        _mode = mode;
-        _instructionManager = InstructionManager.Instance;
-        this.ContainerForSpawnedItems = ContainerForSpawnedItems;
+    //public void Init(MenuMode mode, GameObject ContainerForSpawnedItems, string InstructionName = null)
+    //{
+    //    _mode = mode;
+    //    _instructionManager = InstructionManager.Instance;
+    //    this.ContainerForSpawnedItems = ContainerForSpawnedItems;
 
-        if (_mode == MenuMode.Record || _mode == MenuMode.Edit)
-        {
-            if(_mode == MenuMode.Edit)
-            {
-                _instructionManager.LoadInstruction(InstructionName);
-                LoadStep(_instructionManager.GetCurrentStep());
-            }
-            else
-            {
-                _instructionManager.CreateNewInstruction(InstructionName, DateTime.Now);
-            }
+    //    if (_mode == MenuMode.Record || _mode == MenuMode.Edit)
+    //    {
+    //        if(_mode == MenuMode.Edit)
+    //        {
+    //            _instructionManager.LoadInstruction(InstructionName);
+    //            LoadStep(_instructionManager.GetCurrentStep());
+    //        }
+    //        else
+    //        {
+    //            _instructionManager.CreateNewInstruction(InstructionName, DateTime.Now);
+    //        }
 
-            NextStepButton.SetActive(true);
+    //        NextStepButton.SetActive(true);
 
-            Keyboard.TextTyped.AddListener(NewText);
-        }
-        else
-        {
-            _instructionManager.LoadInstruction(InstructionName);
+    //        Keyboard.TextTyped.AddListener(NewText);
+    //    }
+    //    else
+    //    {
+    //        _instructionManager.LoadInstruction(InstructionName);
 
-            InsertTextButton.SetActive(false);
-            FinishButton.SetActive(false);
+    //        InsertTextButton.SetActive(false);
+    //        FinishButton.SetActive(false);
 
-            LoadStep(_instructionManager.GetCurrentStep());
-            if (!_instructionManager.NextStepAvailabe())
-            {
-                NextStepButton.SetActive(false);
-            }
-        }
-        PreviousStepButton.SetActive(false);
+    //        LoadStep(_instructionManager.GetCurrentStep());
+    //        if (!_instructionManager.NextStepAvailabe())
+    //        {
+    //            NextStepButton.SetActive(false);
+    //        }
+    //    }
+    //    PreviousStepButton.SetActive(false);
 
-    }
+    //}
 
     /// <summary>
     /// goes into the next step of the instruction or adds a new steps if current steps is the last one
@@ -142,7 +143,7 @@ public class MainPanelController : MonoBehaviour
 
         ClearItems();
 
-        if (!_instructionManager.NextStepAvailabe() && (_mode == MenuMode.Record ||_mode == MenuMode.Edit))
+        if (!_instructionManager.NextStepAvailabe() && (_mode == MenuMode.Record /*||_mode == MenuMode.Edit*/))
         {
             _instructionManager.AddStep();
 
@@ -243,7 +244,7 @@ public class MainPanelController : MonoBehaviour
                 element.GetComponentInChildren<ToolTip>().gameObject.SetActive(false);
             }
 
-            if (_mode == MenuMode.Record || _mode == MenuMode.Edit)
+            if (_mode == MenuMode.Record /*|| _mode == MenuMode.Edit*/)
             {
                 var boundingBox = element.GetComponentInChildren<BoundingBox>();
                 boundingBox.RotateStopped.AddListener(OnItemManipulated);
@@ -282,7 +283,7 @@ public class MainPanelController : MonoBehaviour
 
     private void OnItemManipulated()
     {
-        if (_mode == MenuMode.Record || _mode == MenuMode.Edit)
+        if (_mode == MenuMode.Record /*|| _mode == MenuMode.Edit*/)
         {
             OnNewData?.Invoke();
             _instructionManager.Save();

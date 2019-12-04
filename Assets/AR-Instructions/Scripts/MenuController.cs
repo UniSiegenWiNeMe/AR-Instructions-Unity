@@ -4,8 +4,8 @@ using UnityEngine;
 public enum MenuMode
 {
     Record,
-    Replay,
-    Edit
+    Replay
+    //Edit
 }
 
 
@@ -96,7 +96,7 @@ public class MenuController : MonoBehaviour
         MainPanel.SetActive(true);
         MainPanel.GetComponent<MainPanelController>().Init(mode, _containerForSpawnedItems);
 
-        if (mode == MenuMode.Record || _mode == MenuMode.Edit)
+        if (mode == MenuMode.Record) //|| _mode == MenuMode.Edit
         {
             ItemPanel.SetActive(true);
             ItemPanel.GetComponent<ItemPanelController>().ContainerForSpawnedItems = _containerForSpawnedItems;

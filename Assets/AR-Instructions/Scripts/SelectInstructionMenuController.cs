@@ -56,7 +56,7 @@ public class SelectInstructionMenuController : MonoBehaviour
 
     public void SetEditMode(bool mode)
     {
-        Mode = mode ? MenuMode.Edit : MenuMode.Replay;
+        Mode = mode ? MenuMode.Record : MenuMode.Replay;
 
         foreach (Transform item in ItemParent.transform)
         {

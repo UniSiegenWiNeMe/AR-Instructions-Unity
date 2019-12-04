@@ -33,6 +33,9 @@ public class GUIManager : MonoBehaviour
             ContainerForSpawnedItems = GameObject.Find("Container");
         }
 
+        InstructionManager.Instance.ImportCompleted += OnCompleted;
+
+
         _footMenu = Instantiate(FootMenuPrefab);
         _footMenu.GetComponent<FootMenuController>().HomeInteractable.OnClick.AddListener(FootMenu_OnHomeClick);
         _footMenu.GetComponent<FootMenuController>().MarkerScanInteractable.OnClick.AddListener(FootMenu_OnMarkerScanClick);
@@ -40,6 +43,11 @@ public class GUIManager : MonoBehaviour
         CreateSelectMenu();
         
 
+    }
+
+    private void OnCompleted(object sender, EventArgs e)
+    {
+        ShowInstructionMenu(MenuMode.Record);
     }
 
     private void CreateSelectMenu()
@@ -93,7 +101,8 @@ public class GUIManager : MonoBehaviour
 
     public void SelectInstructionMenu_OnImportInstructionClick()
     {
-        throw new NotImplementedException();
+        DestroySelectMenu();
+        InstructionManager.Instance.ImportInstruction();
     }
     private void SelectInstructionMenu_OnSelect(object sender, InstructionSelectionEventArgs e)
     {

@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class InstructionManager : Singleton<InstructionManager>
 {
+    public event EventHandler ImportCompleted;
+
+
     private List<string> _allFileFullNames;
 
     public List<string> AllFileNames
@@ -117,6 +120,19 @@ public class InstructionManager : Singleton<InstructionManager>
         Save(true, Application.persistentDataPath);
         UpdateFileNames();
 
+    }
+
+    internal void ImportInstruction()
+    {
+        var importer = new Import();
+        importer.ImportCompleted+=InstructionImported;
+        importer.DoImport();
+
+    }
+    
+    private void InstructionImported(object sender, EventArgs e)
+    {
+        ImportCompleted?.Invoke(this, null);
     }
 
     private void UpdateFileNames()
