@@ -13,7 +13,7 @@ public class InstructionManager : Singleton<InstructionManager>
 
     private List<string> _allFileFullNames;
 
-    public List<string> AllFileNames
+    public List<string> AllFullFileNames
     {
         get
         {
@@ -28,7 +28,7 @@ public class InstructionManager : Singleton<InstructionManager>
     {
         get
         {
-            return AllFileNames.Count;
+            return AllFullFileNames.Count;
         }
     }
 
@@ -114,12 +114,40 @@ public class InstructionManager : Singleton<InstructionManager>
     /// <param name="dateCreated">Date when instruction was created</param>
     internal void CreateNewInstruction(string name, DateTime dateCreated)
     {
+        int i = 1;
+        var tmpName = name;
+        while (Exist(tmpName))
+        {
+            tmpName = name + " (" + i + ")";
+            i++;
+        }
+        name = tmpName;
+
+        Debug.Log(name);
         Instruction = null;
         Instruction = new Instruction(name, dateCreated);
         Instruction.Steps.Add(new Step(CurrentStepNumber));
         Save(true, Application.persistentDataPath);
         UpdateFileNames();
 
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    private bool Exist(string name)
+    {
+        foreach (var fullFileName in AllFullFileNames)
+        {
+            if(ExtractFileNameFromPath(fullFileName) == name)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     internal void ImportInstruction()
@@ -322,7 +350,7 @@ public class InstructionManager : Singleton<InstructionManager>
     public IEnumerable<string> GetInstructionNamesForPage(int pageNumber, int pageSize)
     {
         var skip = pageNumber * pageSize;
-        return AllFileNames.Skip(skip).Take(pageSize);
+        return AllFullFileNames.Skip(skip).Take(pageSize);
     }
 
 
