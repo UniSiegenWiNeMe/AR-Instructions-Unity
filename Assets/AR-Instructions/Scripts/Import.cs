@@ -68,7 +68,8 @@ public class Import
 
     private async Task extract(StorageFile file, string path)
     {
-        if(!Directory.Exists(Path.Combine(path, "media")))
+        string tmpName = string.Empty;
+        if (!Directory.Exists(Path.Combine(path, "media")))
         {
             Directory.CreateDirectory(Path.Combine(path, "media"));
         }
@@ -77,14 +78,28 @@ public class Import
         {
             foreach (var entry in archive.Entries)
             {
-                if (File.Exists(Path.Combine(path, entry.FullName)))
+                tmpName = entry.FullName;
+
+                if (tmpName.EndsWith(".save"))
                 {
-                    File.Delete(Path.Combine(path, entry.FullName));
+                    int i = 1;
+                    while (File.Exists(Path.Combine(path, tmpName)))
+                    {
+                        
+                        tmpName = entry.FullName.Substring(0, entry.FullName.LastIndexOf('.')) + " (" + i + ").save";
+                        i++;
+                    }
                 }
-                
+                else
+                {
+                    if (File.Exists(Path.Combine(path, tmpName)))
+                    {
+                        File.Delete(Path.Combine(path, tmpName));
+                    }
+                }
                 try
                 {
-                    entry.ExtractToFile(Path.Combine(path, entry.FullName), true);
+                    entry.ExtractToFile(Path.Combine(path, tmpName), true);
                 }
                 catch (Exception ex)
                 {
@@ -95,15 +110,17 @@ public class Import
     
         UnityMainThreadDispatcher.Instance().Enqueue(() =>
         {
-            var instructionFullPath = Path.Combine(path,file.DisplayName + ".save");
+            var instructionFullPath = Path.Combine(path, tmpName);
             if (File.Exists(instructionFullPath))
             {
                 var serializer = new XmlSerializer(typeof(Instruction));
                 var stream = new FileStream(instructionFullPath, FileMode.Open);
                 var save = (Instruction)serializer.Deserialize(stream);
+                save.Name = tmpName.Substring(0, tmpName.LastIndexOf("."));
                 stream.Flush();
                 stream.Dispose();
                 InstructionManager.Instance.Instruction = save;
+                InstructionManager.Instance.Save();
                 ImportCompleted?.Invoke(this,null);
             }
             else
