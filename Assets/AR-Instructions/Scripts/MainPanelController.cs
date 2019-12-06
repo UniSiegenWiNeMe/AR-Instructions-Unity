@@ -8,6 +8,7 @@ using UnityEngine.Events;
 
 public class MainPanelController : MonoBehaviour
 {
+    public TextMeshPro InstructionNameLabel;
     /// <summary>
     /// Controller of the photo and video panel
     /// </summary>
@@ -63,6 +64,13 @@ public class MainPanelController : MonoBehaviour
         _mode = mode;
         _instructionManager = InstructionManager.Instance;
         this.ContainerForSpawnedItems = ContainerForSpawnedItems;
+        string tmpName = InstructionManager.Instance.Instruction.Name;
+        if (tmpName.Length > 27)
+        {
+            tmpName = tmpName.Substring(0, 27) + "..."; 
+        }
+
+        InstructionNameLabel.text = tmpName;
 
         if (_mode == MenuMode.Record /*|| _mode == MenuMode.Edit*/)
         {
