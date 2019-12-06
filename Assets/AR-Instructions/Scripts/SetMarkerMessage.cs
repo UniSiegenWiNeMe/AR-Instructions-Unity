@@ -10,6 +10,16 @@ public class SetMarkerMessage : MonoBehaviour
     {
         var stabilizedTracking = GetComponentInParent<StabilizedTracking>();
         stabilizedTracking.MarkerScanned += StabilizedTracking_MarkerScanned;
+        stabilizedTracking.MarkerReset += StabilizedTracking_MarkerReset;
+    }
+
+    private void StabilizedTracking_MarkerReset(object sender, System.EventArgs e)
+    {
+        var text = GetComponent<TextMeshPro>();
+        if (text != null)
+        {
+            text.text = "Marker wird gescannt."+System.Environment.NewLine+" Bitte warten.";
+        }
     }
 
     private void StabilizedTracking_MarkerScanned(object sender, MarkerScannedEventArgs e)

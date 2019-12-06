@@ -11,6 +11,8 @@ public class GUIManager : MonoBehaviour
     public GameObject InstructionMenuPrefab;
     public GameObject EnterNamePrefab;
     public GameObject ContainerForSpawnedItems;
+    public StabilizedTracking StabilizedTracking;
+
 
     private GameObject _selectMenu;
     private GameObject _footMenu;
@@ -60,7 +62,8 @@ public class GUIManager : MonoBehaviour
 
     private void FootMenu_OnMarkerScanClick()
     {
-        throw new NotImplementedException();
+        StabilizedTracking.Reset();
+
     }
 
     private void FootMenu_OnHomeClick()
