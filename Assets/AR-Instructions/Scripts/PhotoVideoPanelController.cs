@@ -25,6 +25,8 @@ public class PhotoVideoPanelController : MonoBehaviour
     private int _currentMediaIndex;
     private List<MediaFile> _mediaFiles;
 
+    private MenuMode _mode;
+
     public void Reset(List<MediaFile> newMediaFiles)
     {
         _mediaFiles = newMediaFiles;
@@ -39,6 +41,11 @@ public class PhotoVideoPanelController : MonoBehaviour
             //turn next button only on when there is more than 1 mediafile
             NextMediaFileButton.gameObject.SetActive(_mediaFiles.Count > 1 ? true : false);
             SetMediaFileCounter(_currentMediaIndex + 1, _mediaFiles.Count);
+
+            if(_mode == MenuMode.Record)
+            {
+                DeleteButton.SetActive(true);
+            }
         }
         else
         {
@@ -48,18 +55,21 @@ public class PhotoVideoPanelController : MonoBehaviour
             VideoTimerText.text = string.Empty;
             PreviousMediaFileButton.gameObject.SetActive(false);
             NextMediaFileButton.gameObject.SetActive(false);
+            DeleteButton.SetActive(false);
         }
-        DeleteButton.SetActive(false);
+        
     }
 
     
     public void SetMode(MenuMode mode)
     {
+        _mode = mode;
+
         if (mode == MenuMode.Replay)
         {
             TakePhotoButton.SetActive(false);
             TakeVideoButton.SetActive(false);
-            
+            DeleteButton.SetActive(false);
         }
     }
 
