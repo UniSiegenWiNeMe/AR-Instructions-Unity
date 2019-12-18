@@ -153,15 +153,22 @@ public class InstructionManager : Singleton<InstructionManager>
     internal void ImportInstruction()
     {
         var importer = new Import();
-        importer.ImportCompleted+=InstructionImported;
+        importer.ImportCompleted += Importer_ImportCompleted;
         importer.DoImport();
 
     }
-    
-    private void InstructionImported(object sender, EventArgs e)
+
+    private void Importer_ImportCompleted(object sender, string e)
     {
+        //InstructionManager.Instance.LoadInstruction(e);
+        UpdateFileNames();
         ImportCompleted?.Invoke(this, null);
     }
+
+    //private void InstructionImported(object sender, EventArgs e)
+    //{
+    //    ImportCompleted?.Invoke(this, null);
+    //}
 
     private void UpdateFileNames()
     {
@@ -174,14 +181,17 @@ public class InstructionManager : Singleton<InstructionManager>
     /// <param name="name"></param>
     internal bool LoadInstruction(string name)
     {
-        Instruction = SaveLoadManager.Instance.Load(name);
-        if(Instruction == null)
-        {
-            Debug.Log("instruction = null");
-            return false;
-        }
-        CurrentStepNumber = 0;
+        UnityMainThreadDispatcher.Instance().Enqueue(() => {
+            Instruction = SaveLoadManager.Instance.Load(name);
+            if (Instruction == null)
+            {
+                Debug.Log("instruction = null");
+            }
+            CurrentStepNumber = 0;
+        });
+
         return true;
+
     }
     /// <summary>
     /// Gets the current step data

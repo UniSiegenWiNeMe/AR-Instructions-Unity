@@ -49,7 +49,8 @@ public class GUIManager : MonoBehaviour
 
     private void OnCompleted(object sender, EventArgs e)
     {
-        ShowInstructionMenu(MenuMode.Record);
+        CreateSelectMenu();
+        //ShowInstructionMenu(MenuMode.Record);
     }
 
     private void CreateSelectMenu()

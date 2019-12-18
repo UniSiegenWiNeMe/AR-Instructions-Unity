@@ -13,6 +13,8 @@ using Windows.Storage.Provider;
 using Windows.Storage.Streams;
 using System.IO.Compression;
 using System.Xml.Serialization;
+using System.Xml.Linq;
+using System.Text;
 #endif
 
 public class Import
@@ -21,7 +23,7 @@ public class Import
     private FileOpenPicker openPicker;
 #endif
 
-    public event EventHandler ImportCompleted;
+    public event EventHandler<string> ImportCompleted;
 
     public Import()
     {
@@ -108,25 +110,17 @@ public class Import
             }
         }
     
-        UnityMainThreadDispatcher.Instance().Enqueue(() =>
-        {
+        UnityMainThreadDispatcher.Instance().Enqueue(() => {
             var instructionFullPath = Path.Combine(path, tmpName);
             if (File.Exists(instructionFullPath))
             {
-                var serializer = new XmlSerializer(typeof(Instruction));
-                var stream = new FileStream(instructionFullPath, FileMode.Open);
-                var save = (Instruction)serializer.Deserialize(stream);
-                save.Name = tmpName.Substring(0, tmpName.LastIndexOf("."));
-                stream.Flush();
-                stream.Dispose();
-                InstructionManager.Instance.Instruction = save;
-                InstructionManager.Instance.Save();
-                ImportCompleted?.Invoke(this,null);
+                ImportCompleted?.Invoke(this,instructionFullPath);
             }
             else
             {
             }
-        });
+    });
+        
     }
 
 #endif
