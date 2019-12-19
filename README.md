@@ -19,6 +19,9 @@ On the right side you can select holograms which can be placed freely in space. 
 ![Main UI](Documentation/20191219_121833_HoloLens_crop.jpg)
 
 
+![Main UI](Documentation/placing hologram.gif)
+
+
 Quickstart guide:  
 1. Get a vuforia (developer) license at: https://developer.vuforia.com/  
 2. Create a new VuMark database (Target Manager)  
