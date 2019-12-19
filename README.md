@@ -8,8 +8,15 @@ The structure of an instruction is the following:
 An instruction has a name and contains one or more steps.  
 Each steps has a stepnumber, a text to descript what to do in this step, can have multiple photos and videos as well as holograms. Photos and videos can be captured directly in the application. At the moment there are three different: box, arrow and circular arrow. The holograms which can be placed in space by simple hand gestures. The user can set the color of the holograms, avaiable colors are red, yellow and green. Additionally, little tool tips can be added to the holograms.
 
+## Main UI
 
-**INSERT PICTURES AND VIDEOS HERE**
+This is the main UI. While creating in there are three panels. On the left side you have a panel for photos and videos. You can directly capture photos and videos from the application.
+
+The panel in the middle is for the text description. You see the current and maximal stepnumber and go through the steps.
+
+On the right side you can select holograms which can be placed freely in space. This panel is hidden in replay mode.
+
+![Main UI](Documentation/20191219_121833_HoloLens_crop.jpg)
 
 
 Quickstart guide:  
