@@ -18,8 +18,7 @@ On the right side you can select holograms which can be placed freely in space. 
 
 ![Main UI](Documentation/20191219_121833_HoloLens_crop.jpg)
 
-
-![Main UI](Documentation/placing hologram.gif)
+<img src="Documentation/placing hologram.gif" height="400" />
 
 
 Quickstart guide:  
