@@ -4,8 +4,8 @@ using UnityEngine;
 public enum MenuMode
 {
     Record,
-    Replay,
-    Edit
+    Replay
+    //Edit
 }
 
 
@@ -15,20 +15,48 @@ public class MenuController : MonoBehaviour
     public GameObject PhotoPanel;
     public GameObject MainPanel;
     public GameObject MarkerPanel;
-        public GameObject[] GameObjectsToHide;
+    public GameObject[] GameObjectsToHide;
 
     private MenuMode _mode;
-    private string _instructionName;
-    private InstructionManagerSingleton _instructionManager;
+    private InstructionManager _instructionManager;
     private GameObject _containerForSpawnedItems;
-    private bool _visbility = true;
+    private bool _visbility;
+
+    public void Init(MenuMode mode, GameObject containerForSpawnedItems)
+    {
+        _mode = mode;
+        _containerForSpawnedItems = containerForSpawnedItems;
+        _instructionManager = InstructionManager.Instance;
+
+        var vumark = GameObject.Find("VuMark");
+
+#if UNITY_EDITOR
+        SetMode(_mode);
+        return;
+#endif
+        if (vumark)
+        {
+            var stabilizedTracking = vumark.GetComponentInChildren<StabilizedTracking>();
+
+            if (stabilizedTracking)
+            {
+                if (stabilizedTracking.IsMarkerScanned)
+                {
+                    SetMode(_mode);
+                }
+                else
+                {
+                    stabilizedTracking.MarkerScanned += StabilizedTracking_MarkerScanned;
+                }
+            }
+        }
+    }
 
     public void Init(MenuMode mode, GameObject containerForSpawnedItems, string instructionName = null)
     {
         _mode = mode;
         _containerForSpawnedItems = containerForSpawnedItems;
-        _instructionName = instructionName;
-        _instructionManager = InstructionManagerSingleton.Instance;
+        _instructionManager = InstructionManager.Instance;
 
         var vumark = GameObject.Find("VuMark");
 
@@ -66,11 +94,9 @@ public class MenuController : MonoBehaviour
         PhotoPanel.GetComponent<PhotoVideoPanelController>().SetMode(mode);
 
         MainPanel.SetActive(true);
-        MainPanel.GetComponent<MainPanelController>().Init(mode, _containerForSpawnedItems, _instructionName);
+        MainPanel.GetComponent<MainPanelController>().Init(mode, _containerForSpawnedItems);
 
-        
-
-        if (mode == MenuMode.Record || _mode == MenuMode.Edit)
+        if (mode == MenuMode.Record) //|| _mode == MenuMode.Edit
         {
             ItemPanel.SetActive(true);
             ItemPanel.GetComponent<ItemPanelController>().ContainerForSpawnedItems = _containerForSpawnedItems;

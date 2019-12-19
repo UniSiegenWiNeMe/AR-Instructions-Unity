@@ -1,4 +1,5 @@
 ﻿using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,106 +10,142 @@ using UnityEngine;
 
 public class SelectInstructionMenuController : MonoBehaviour
 {
-    private MenuMode _mode;
-    List<string> allInstructionFiles;
-    public int NumberOfItemsToShow = 5;
-    public int NumberOfCharsToShow = 15;
+    public MenuMode Mode { get; private set; }
+
     public GameObject ItemParent;
     public GameObject ItemPrefab;
+    public int NumberOfItemsToShow = 6;
 
     public TextMeshPro PageCounterText;
     public GameObject NextPageButton;
     public GameObject PreviousPageButton;
-    public GameObject CreateNewInstructionButton;
-    public GameObject LoadFromTemplate;
 
-    private int currentPage = 1;
+    public Interactable CreateNewInstructionInteractable;
+    public Interactable ImportInstructionInteractable;
+
+    public event EventHandler<InstructionSelectionEventArgs> InstructionSelected;
+
+    private int _currentPage = 1;
     private int _maxPageNumber;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
-        allInstructionFiles = GetAllInstructionFiles();
+        Mode = MenuMode.Replay;
 
-        var items = allInstructionFiles.Take(NumberOfItemsToShow);
+        
+        var items = InstructionManager.Instance.GetInstructionNamesForPage(0, NumberOfItemsToShow);
         LoadItemsToMenu(items);
 
         if (PageCounterText != null)
         {
-            _maxPageNumber = (allInstructionFiles.Count / NumberOfItemsToShow);
-            if(allInstructionFiles.Count%NumberOfItemsToShow != 0)
+            _maxPageNumber = (InstructionManager.Instance.Count / NumberOfItemsToShow);
+            if(InstructionManager.Instance.Count % NumberOfItemsToShow != 0)
             {
                 _maxPageNumber++;
             }
 
-            PageCounterText.text = currentPage + "/" + _maxPageNumber;
+            PageCounterText.text = _currentPage + "/" + _maxPageNumber;
         }
 
-        NextPageButton.SetActive(allInstructionFiles.Count > NumberOfItemsToShow);
+        NextPageButton.SetActive(InstructionManager.Instance.Count > NumberOfItemsToShow);
         PreviousPageButton.SetActive(false);
     }
 
-    public void Init(MenuMode mode)
+    public void SetEditMode(bool mode)
     {
-        _mode = mode;
+        Mode = mode ? MenuMode.Record : MenuMode.Replay;
 
-        CreateNewInstructionButton.SetActive((_mode == MenuMode.Record ||_mode == MenuMode.Edit)? true : false);
-        LoadFromTemplate.SetActive((_mode == MenuMode.Record || _mode == MenuMode.Edit) ? true : false);
+        foreach (Transform item in ItemParent.transform)
+        {
+            item.gameObject.GetComponent<MenuItemController>().SetMode(mode);
+        }
     }
 
     private void LoadItemsToMenu(IEnumerable<string> items, bool clearBeforeLoad = false)
     {
         if(clearBeforeLoad)
         {
-            foreach (Transform child in ItemParent.transform)
+            for (int i = 0; i < ItemParent.transform.childCount; i++)
             {
-                Destroy(child.gameObject);
+                ItemParent.transform.GetChild(i).GetComponent<MenuItemController>().InstructionSelected -= SelectInstructionMenuController_InstructionSelected;
+                ItemParent.transform.GetChild(i).GetComponent<MenuItemController>().InstructionRemoved -= SelectInstructionMenuController_InstructionRemoved;
+                ItemParent.transform.GetChild(i).gameObject.SetActive(false);
+                Destroy(ItemParent.transform.GetChild(i).gameObject);
             }
         }
 
         foreach (var item in items)
         {
             var instruction = SaveLoadManager.Instance.Load(item);
-
             var itemGameObject = Instantiate(ItemPrefab, ItemParent.transform);
-            itemGameObject.GetComponentInChildren<ShowInstructionMenu>().InstructionName = item;
-            itemGameObject.GetComponentInChildren<ShowInstructionMenu>().EditMode = _mode == MenuMode.Edit ? true : false;
+            itemGameObject.gameObject.GetComponent<MenuItemController>().SetMode(Mode == MenuMode.Replay ? false: true );
+            itemGameObject.GetComponent<MenuItemController>().SetInstruction(instruction);
+            itemGameObject.GetComponent<MenuItemController>().InstructionSelected += SelectInstructionMenuController_InstructionSelected;
+            itemGameObject.GetComponent<MenuItemController>().InstructionRemoved += SelectInstructionMenuController_InstructionRemoved;
 
-            string itemText = instruction.Name; 
-            if (instruction.Name.Length >  NumberOfCharsToShow)
-            {
-                itemText = itemText.Substring(0, NumberOfCharsToShow).TrimEnd('.') + "...";
-            }
-
-            itemGameObject.GetComponent<TextMeshPro>().text = itemText;
-            itemGameObject.GetComponentInChildren<Interactable>().OnClick.AddListener(OnSelect);
         }
+        ItemParent.GetComponent<GridObjectCollection>()?.UpdateCollection();
+    }
+
+    private void SelectInstructionMenuController_InstructionRemoved(object sender, InstructionSelectionEventArgs e)
+    {
+        RefreshPage();
+    }
+
+    public void RefreshPage()
+    {
+        if (_currentPage == _maxPageNumber && InstructionManager.Instance.Count % NumberOfItemsToShow == 0)
+        {
+            NextPageButton.SetActive(false);
+            _currentPage--;
+            if(_currentPage == 1)
+            {
+                PreviousPageButton.SetActive(false);
+            }
+        }
+
+        _maxPageNumber = InstructionManager.Instance.Count / NumberOfItemsToShow;
+        _maxPageNumber = InstructionManager.Instance.Count % NumberOfItemsToShow == 0 ? _maxPageNumber : _maxPageNumber + 1;
+
+        PageCounterText.text = _currentPage + "/" + _maxPageNumber;
+
+        var items = InstructionManager.Instance.GetInstructionNamesForPage(_currentPage - 1, NumberOfItemsToShow);
+        LoadItemsToMenu(items, true);
+    }
+
+    private void SelectInstructionMenuController_InstructionSelected(object sender, InstructionSelectionEventArgs e)
+    {
+        InstructionSelected?.Invoke(sender, e);
     }
 
     public void OnNextPage()
     {
-        var items = allInstructionFiles.Skip(currentPage * NumberOfItemsToShow).Take(NumberOfItemsToShow);
+        _currentPage++;
+        //var items = InstructionManager.Instance.GetInstructionNames((_currentPage+1) * NumberOfItemsToShow, NumberOfItemsToShow);
+        var items = InstructionManager.Instance.GetInstructionNamesForPage(_currentPage - 1,NumberOfItemsToShow);
+
         LoadItemsToMenu(items,true);
 
         PreviousPageButton.SetActive(true);
-        currentPage++;
-        if (currentPage * NumberOfItemsToShow >= allInstructionFiles.Count)
+        if (_currentPage * NumberOfItemsToShow >= InstructionManager.Instance.Count)
         {
             NextPageButton.SetActive(false);
         }
-        PageCounterText.text = currentPage + "/" + _maxPageNumber;
+        PageCounterText.text = _currentPage + "/" + _maxPageNumber;
     }
 
     public void OnPreviousPage()
     {
-        currentPage--;
-        var items = allInstructionFiles.Skip((currentPage-1) * NumberOfItemsToShow).Take(NumberOfItemsToShow);
+        _currentPage--;
+        var items = InstructionManager.Instance.GetInstructionNamesForPage(_currentPage - 1, NumberOfItemsToShow);
         LoadItemsToMenu(items, true);
 
         NextPageButton.SetActive(true);
 
-        if (currentPage > 1)
+        if (_currentPage > 1)
         {
             PreviousPageButton.SetActive(true);
         }
@@ -116,21 +153,9 @@ public class SelectInstructionMenuController : MonoBehaviour
         {
             PreviousPageButton.SetActive(false);
         }
-        PageCounterText.text = currentPage + "/" + _maxPageNumber;
+        PageCounterText.text = _currentPage + "/" + _maxPageNumber;
     }
-
-    private void OnSelect()
-    {
-        gameObject.SetActive(false);
-    }
-
-    private List<string> GetAllInstructionFiles()
-    {
-        var files = Directory.GetFiles(Application.persistentDataPath, "*save").ToList();
-
-        files.Sort();
-        return files;
-    }
+    
 }
 
 

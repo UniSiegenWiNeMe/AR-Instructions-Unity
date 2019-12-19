@@ -1,19 +1,31 @@
-﻿//using Microsoft.MixedReality.Toolkit.Examples.Demos;
-using System.Collections;
-using System.Collections.Generic;
+﻿using Microsoft.MixedReality.Toolkit.UI;
+using System;
 using TMPro;
 using UnityEngine;
 
-public class OpenKeyboardOnStart : MonoBehaviour
+public class EnterInstructionNameController : MonoBehaviour
 {
+    public event EventHandler Continue;
+
     // For System Keyboard
     public TouchScreenKeyboard keyboard;
-    public static string keyboardText = "";
+    public string keyboardText = "";
     public TextMeshPro OutputTextMesh;
 
-    private void Start()
+    private Interactable _continueButton;
+
+
+    void Start()
     {
+        _continueButton = GetComponentInChildren<Interactable>();
+
         OpenSystemKeyboard();
+
+#if UNITY_EDITOR
+        OutputTextMesh.text = "Name: EDITOR-" + DateTime.Now.ToString("yyyy.MM.dd hh-mm");
+        keyboardText = "EDITOR-" + DateTime.Now.ToString("yyyy.MM.dd hh-mm");
+        _continueButton.IsEnabled = true;
+#endif
     }
 
 #if UNITY_WSA && !UNITY_EDITOR
@@ -29,6 +41,7 @@ public class OpenKeyboardOnStart : MonoBehaviour
             else
             {
                 OutputTextMesh.text = "Name: " + keyboardText;
+                _continueButton.IsEnabled = true;
                 keyboard = null;
             }
         }
@@ -39,4 +52,12 @@ public class OpenKeyboardOnStart : MonoBehaviour
     {
         keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, false, false);
     }
+
+    public void OnContinue()
+    {
+        InstructionManager.Instance.CreateNewInstruction(keyboardText, DateTime.Now);
+
+        Continue?.Invoke(this, null);
+    }
+
 }

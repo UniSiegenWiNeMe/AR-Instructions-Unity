@@ -11,7 +11,7 @@ public class ItemPanelController : MonoBehaviour
     public GameObject Items;
     public UnityEvent OnNewData;
 
-    private InstructionManagerSingleton _instructionManager;
+    private InstructionManager _instructionManager;
 
     public void Start()
     {
@@ -21,7 +21,7 @@ public class ItemPanelController : MonoBehaviour
             spawnNewItem.Parent = ContainerForSpawnedItems.transform;
             spawnNewItem.ObjectSpawned += SpawnNewItem_ObjectSpawned;
         }
-        _instructionManager = InstructionManagerSingleton.Instance;
+        _instructionManager = InstructionManager.Instance;
     }
 
     private void SpawnNewItem_ObjectSpawned(object sender, ObjectSpawnedEventArgs e)
@@ -47,6 +47,6 @@ public class ItemPanelController : MonoBehaviour
     private void OnItemManipulated()
     {
         OnNewData?.Invoke();
-        InstructionManagerSingleton.Instance.Save();
+        InstructionManager.Instance.Save();
     }
 }

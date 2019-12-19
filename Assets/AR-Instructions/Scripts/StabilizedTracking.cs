@@ -28,7 +28,7 @@ public class StabilizedTracking : MonoBehaviour, ITrackableEventHandler
     }
 
     public event EventHandler<MarkerScannedEventArgs> MarkerScanned;
-
+    public event EventHandler MarkerReset;
 
     protected TrackableBehaviour TrackableBehaviour;
     protected TrackableBehaviour.Status PreviousStatus;
@@ -85,6 +85,19 @@ public class StabilizedTracking : MonoBehaviour, ITrackableEventHandler
         }
     }
 
+    internal void Reset()
+    {
+        IsMarkerScanned = false;
+        MarkerPosition = new Vector3();
+        MarkerRotation = new Quaternion();
+        _rawTransformations = new List<Transform>();
+        _transformSet = false;
+
+        VuforiaBehaviour.Instance.enabled = true;
+
+        MarkerReset?.Invoke(this, null);
+    }
+
     public void Update()
     {
         if(NewStatus == TrackableBehaviour.Status.TRACKED && _rawTransformations.Count <= TargetCount)
@@ -129,17 +142,17 @@ public class StabilizedTracking : MonoBehaviour, ITrackableEventHandler
             list.Sort();
         }
 
-        
-
         Vector3 position = new Vector3(positionX[TargetCount / 2], positionY[TargetCount / 2], positionZ[TargetCount / 2]);
         Quaternion rotation = new Quaternion(rotationX[TargetCount / 2], rotationY[TargetCount / 2], rotationZ[TargetCount / 2], rotationW[TargetCount / 2]);
-
-        MarkerScanned?.Invoke(this, new MarkerScannedEventArgs(position, rotation));
 
         IsMarkerScanned = true;
         MarkerPosition = position;
         MarkerRotation = rotation;
         VuforiaBehaviour.Instance.enabled = false;
+
+        MarkerScanned?.Invoke(this, new MarkerScannedEventArgs(position, rotation));
+
+        
     }
 
     protected virtual void OnTrackingFound()

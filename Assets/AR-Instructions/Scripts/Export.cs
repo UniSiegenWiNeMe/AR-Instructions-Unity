@@ -31,7 +31,7 @@ public class Export : MonoBehaviour
     {
         DisableUI();
 
-        var name = InstructionManagerSingleton.Instance.Instruction.Name;
+        var name = InstructionManager.Instance.Instruction.Name;
         var pathToSave = Application.persistentDataPath;
         var pathToMedia = Path.Combine(Application.persistentDataPath, "media");
 
@@ -93,8 +93,8 @@ public class Export : MonoBehaviour
             
             if (file != null)
             {
-                InstructionManagerSingleton.Instance.Instruction.Name = file.DisplayName;
-                InstructionManagerSingleton.Instance.Save(true, pathToSave);
+                InstructionManager.Instance.Instruction.Name = file.DisplayName;
+                InstructionManager.Instance.Save(true, pathToSave);
                 
                 ShowWaitingDialog();
                 using (Stream zipFileToSave = await file.OpenStreamForWriteAsync())
@@ -106,9 +106,9 @@ public class Export : MonoBehaviour
                         //todo: check mode
                         using (ZipArchive archive = new ZipArchive(zipFileToSave, ZipArchiveMode.Update))
                         {
-                            archive.CreateEntryFromFile(Path.Combine(pathToSave, InstructionManagerSingleton.Instance.Instruction.Name + ".save"), InstructionManagerSingleton.Instance.Instruction.Name + ".save");
+                            archive.CreateEntryFromFile(Path.Combine(pathToSave, InstructionManager.Instance.Instruction.Name + ".save"), InstructionManager.Instance.Instruction.Name + ".save");
 
-                            foreach (var step in InstructionManagerSingleton.Instance.Instruction.Steps)
+                            foreach (var step in InstructionManager.Instance.Instruction.Steps)
                             {
                                 foreach (var mediaFile in step.MediaFiles)
                                 {

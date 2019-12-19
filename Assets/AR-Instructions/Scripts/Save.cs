@@ -11,7 +11,6 @@ public class Instruction
     public List<Step> Steps = new List<Step>();
     public String Name;
     public DateTime DateCreated;
-   
 
     public int StepsCount {
         get
@@ -25,7 +24,6 @@ public class Instruction
         Name = name;
         DateCreated = dateCreated;
         Steps = new List<Step>();
-
     }
 
     public Instruction()
