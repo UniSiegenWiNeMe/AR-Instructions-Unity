@@ -156,7 +156,7 @@ public class MainPanelController : MonoBehaviour
             _instructionManager.AddStep();
 
             PhotoVideoPanelController.Reset(_instructionManager.GetCurrentMediaFiles());
-            InstructionText.text = "Anweisung:" + Environment.NewLine + "Kein Anweisungstext vorhanden.";
+            InstructionText.text = "Description:";
         }
         else
         {
@@ -233,11 +233,11 @@ public class MainPanelController : MonoBehaviour
         
         if (!String.IsNullOrEmpty(instruction))
         {
-            InstructionText.text = "Anweisung:" + Environment.NewLine + instruction;
+            InstructionText.text = "Description:" + Environment.NewLine + instruction;
         }
         else
         {
-            InstructionText.text = "Anweisung: " + Environment.NewLine + "Kein Anweisungstext vorhanden";
+            InstructionText.text = "Description: ";
         }
     }
 
@@ -341,7 +341,7 @@ public class MainPanelController : MonoBehaviour
 
     private void SetStepCounterText()
     {
-        StepCounterText.text = $"Schritt: {_instructionManager.CurrentStepNumber + 1}/{_instructionManager.StepsCount}";
+        StepCounterText.text = $"Step: {_instructionManager.CurrentStepNumber + 1}/{_instructionManager.StepsCount}";
     }
 
     private void NewText(string text)

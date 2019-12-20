@@ -17,6 +17,6 @@ public class WaitingDialogController : MonoBehaviour
     public void ExportCompleted()
     {
         Button.SetActive(true);
-        GetComponentInChildren<FitBackgroundToContent>().ToolTipText = "Export abgeschlossen.";
+        GetComponentInChildren<FitBackgroundToContent>().ToolTipText = "Export finished.";
     }
 }
