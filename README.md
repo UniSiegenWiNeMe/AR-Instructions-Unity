@@ -18,13 +18,22 @@ On the right side you can select holograms which can be placed freely in space. 
 
 ![Main UI](Documentation/20191219_121833_HoloLens_crop.jpg)
 
-<img src="Documentation/placing hologram.gif" height="400" />
+Selection menu, left normal mode, right editor mode  
+<img src="Documentation/selectionMenu1.jpg" width="400">  <img src="Documentation/selectionMenu2.jpg" width="400">
+
+
+Selecting different colors
+<img src="Documentation/different colors.gif" height="400" />
+
+Placing an object in space
+<img src="Documentation/placing hologram in space.gif" height="400" />
+
 
 
 Quickstart guide:  
 1. Get a vuforia (developer) license at: https://developer.vuforia.com/  
 2. Create a new VuMark database (Target Manager)  
-3. Use the previously created license  
+3. Use the created license  
 4. Use VuMark template from Assets/MarkerForPrinting  
 6. Print VuMark
 5. Download database for unity  
