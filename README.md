@@ -16,7 +16,17 @@ The panel in the middle is for the text description. You see the current and max
 
 On the right side you can select holograms which can be placed freely in space. This panel is hidden in replay mode.
 
-![Main UI](Documentation/20191219_121833_HoloLens_crop.jpg)
+![Main UI](Documentation/instrcutionMenu.jpg)
+
+Closer look at the different panels. 
+Photo and video panel:  
+<img src="Documentation/PhotoAndVideoPanel.jpg" height="400" />
+
+Description panel:  
+<img src="Documentation/descriptionPanel.jpg" height="400" /> 
+
+Item panel:  
+<img src="Documentation/itemPanel.jpg" height="400" /> 
 
 Selection menu, left normal mode, right editor mode  
 <img src="Documentation/selectionMenu1.jpg" width="400">  <img src="Documentation/selectionMenu2.jpg" width="400">
