@@ -4,9 +4,10 @@
 
 AR Instructions is an authoring tool for creating instructions for AR in AR. The very general structure of the application allows to create instructions for basically everything.
 
-The structure of an instruction is the following:  
-An instruction has a name and contains one or more steps.  
-Each steps has a stepnumber, a text to descript what to do in this step, can have multiple photos and videos as well as holograms. Photos and videos can be captured directly in the application. At the moment there are three different: box, arrow and circular arrow. The holograms which can be placed in space by simple hand gestures. The user can set the color of the holograms, avaiable colors are red, yellow and green. Additionally, little tool tips can be added to the holograms.
+The structure of an instruction is the following:
+An instruction has a name and contains one or more steps.
+Each step has a step number, a text to descript what to do in this step, can have multiple photos and videos as well as holograms. Photos and videos can be captured directly in the application. At the moment there are three different: box, arrow and circular arrow. The holograms which can be placed in space by simple hand gestures. The user can set the color of the holograms, available colors are red, yellow and green. Additionally, little tool tips can be added to the holograms.
+
 
 ## Main UI
 
