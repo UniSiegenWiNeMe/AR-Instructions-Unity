@@ -1,5 +1,5 @@
 /*===============================================================================
-Copyright (c) 2017-2018 PTC Inc. All Rights Reserved.
+Copyright (c) 2017-2019 PTC Inc. All Rights Reserved.
 
 Confidential and Proprietary - Protected under copyright and other laws.
 Vuforia is a trademark of PTC Inc., registered in the United States and other 
@@ -37,7 +37,8 @@ public static class OpenSourceInitializer
     static void ReplaceTrackablePlaceHolder(DefaultTrackableBehaviourPlaceholder placeHolder)
     {
         var go = placeHolder.gameObject;
-        go.AddComponent<DefaultTrackableEventHandler>();
+        var dteh = go.AddComponent<DefaultTrackableEventHandler>();
+        SetDefaultTrackableHandlerSettings(dteh);
 
         Object.DestroyImmediate(placeHolder);
     }
@@ -54,12 +55,27 @@ public static class OpenSourceInitializer
     {
         public void AddDefaultTrackableBehaviour(GameObject go)
         {
-            go.AddComponent<DefaultTrackableEventHandler>();
+            var dteh = go.AddComponent<DefaultTrackableEventHandler>();
+            SetDefaultTrackableHandlerSettings(dteh);
         }
 
         public void AddDefaultInitializationErrorHandler(GameObject go)
         {
             go.AddComponent<DefaultInitializationErrorHandler>();
+        }
+    }
+
+    static void SetDefaultTrackableHandlerSettings(DefaultTrackableEventHandler dteh)
+    {
+        if (dteh.gameObject.GetComponent<AnchorBehaviour>() != null)
+        {
+            // render anchors in LIMITED mode
+            dteh.StatusFilter = DefaultTrackableEventHandler.TrackingStatusFilter.Tracked_ExtendedTracked_Limited;
+        }
+        else
+        {
+            // the default for all other targets is not to consider LIMITED poses
+            dteh.StatusFilter = DefaultTrackableEventHandler.TrackingStatusFilter.Tracked_ExtendedTracked;
         }
     }
 }
