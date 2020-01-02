@@ -1,6 +1,6 @@
 # AR Instructions
 
-**This application is under development. When you find a bug or have some suggestions, please create an issue here**
+**This application is under development. When you find a bug or have some suggestions, please create an issue here.**
 
 AR Instructions is an authoring tool for creating instructions for AR in AR. The very general structure of the application allows to create instructions for basically everything.
 
