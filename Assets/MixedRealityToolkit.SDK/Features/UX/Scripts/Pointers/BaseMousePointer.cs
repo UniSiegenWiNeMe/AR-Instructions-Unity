@@ -59,23 +59,14 @@ namespace Microsoft.MixedReality.Toolkit.Input
 
         protected abstract string ControllerName { get; }
 
-        private IMixedRealityController controller;
-
         /// <inheritdoc />
         public override IMixedRealityController Controller
         {
-            get { return controller; }
+            get => base.Controller;
             set
             {
-                controller = value;
+                base.Controller = value;
                 TrackingState = TrackingState.NotApplicable;
-
-                if (controller != null && gameObject != null)
-                {
-                    InputSourceParent = controller.InputSource;
-                    Handedness = controller.ControllerHandedness;
-                    gameObject.name = ControllerName;
-                }
             }
         }
 
@@ -169,7 +160,7 @@ namespace Microsoft.MixedReality.Toolkit.Input
                 RayStabilizer = null;
             }
 
-            foreach (var inputSource in InputSystem.DetectedInputSources)
+            foreach (var inputSource in CoreServices.InputSystem.DetectedInputSources)
             {
                 if (inputSource.SourceId == Controller.InputSource.SourceId)
                 {

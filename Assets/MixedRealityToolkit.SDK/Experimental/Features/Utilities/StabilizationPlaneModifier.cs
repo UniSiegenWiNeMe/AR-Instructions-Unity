@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
-using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using System;
 using UnityEngine;
@@ -32,6 +31,7 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
     /// Using StabilizationPlaneModifier will override DepthLSR. This is automatically enabled via the depth buffer sharing in Unity build settings
     /// StabilizationPlaneModifier is recommended for HoloLens 1, can be used for HoloLens 2, and does a no op for WMR
     /// </summary>
+    [AddComponentMenu("Scripts/MRTK/SDK/StabilizationPlaneModifier")]
     public class StabilizationPlaneModifier : MonoBehaviour
     {
         [System.Serializable]
@@ -138,23 +138,6 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
             }
         }
 
-        private IMixedRealityInputSystem inputSystem = null;
-
-        /// <summary>
-        /// The active instance of the input system.
-        /// </summary>
-        private IMixedRealityInputSystem InputSystem
-        {
-            get
-            {
-                if (inputSystem == null)
-                {
-                    MixedRealityServiceRegistry.TryGetService<IMixedRealityInputSystem>(out inputSystem);
-                }
-                return inputSystem;
-            }
-        }
-
         /// <summary>
         /// Position of the plane in world space.
         /// </summary>
@@ -237,10 +220,12 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
         {
             get
             {
-                if (InputSystem != null && InputSystem.GazeProvider.Enabled)
+                var gazeProvider = CoreServices.InputSystem?.GazeProvider;
+                if (gazeProvider != null && gazeProvider.Enabled)
                 {
-                    return InputSystem.GazeProvider.GazeOrigin;
+                    return gazeProvider.GazeOrigin;
                 }
+
                 return CameraCache.Main.transform.position;
             }
         }
@@ -252,9 +237,10 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
         {
             get
             {
-                if (InputSystem != null && InputSystem.GazeProvider.Enabled)
+                var gazeProvider = CoreServices.InputSystem?.GazeProvider;
+                if (gazeProvider != null && gazeProvider.Enabled)
                 {
-                    return InputSystem.GazeProvider.GazeDirection;
+                    return gazeProvider.GazeDirection;
                 }
 
                 return CameraCache.Main.transform.forward;
@@ -268,17 +254,20 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
         /// <returns>True if gaze is supported and an object was hit by gaze, otherwise false.</returns>
         private bool TryGetGazeHitPosition(out Vector3 hitPosition)
         {
-            if (InputSystem.GazeProvider.Enabled)
+            var gazeProvider = CoreServices.InputSystem?.GazeProvider;
+            if (gazeProvider != null && gazeProvider.Enabled &&
+                gazeProvider.HitInfo.raycastValid)
             {
-                hitPosition = InputSystem.GazeProvider.HitPosition;
+                hitPosition = gazeProvider.HitPosition;
                 return true;
             }
+
             hitPosition = Vector3.zero;
             return false;
         }
 
         /// <summary>
-        /// Configures the stabilization plane to update its position based on an object in the scene.        
+        /// Configures the stabilization plane to update its position based on an object in the scene.
         /// </summary>
         private void ConfigureTransformOverridePlane(float deltaTime)
         {
@@ -322,8 +311,12 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
             planePosition = gazeOrigin + (gazeToPlane * currentPlaneDistance);
 
 #if UNITY_WSA
+            // Ensure compatibility with the pre-2019.3 XR architecture for customers / platforms
+            // with legacy requirements.
+#pragma warning disable 0618
             // Place the plane at the desired depth in front of the user and billboard it to the gaze origin.
             HolographicSettings.SetFocusPointForFrame(planePosition, OverridePlane.Normal, velocity);
+#pragma warning restore 0618
 #endif
 
             return gazeToPlane;
@@ -361,7 +354,9 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
             debugPlane.Center = planePosition;
             debugPlane.Normal = -gazeDirection;
 #elif UNITY_WSA
+#pragma warning disable 0618
             HolographicSettings.SetFocusPointForFrame(planePosition, -gazeDirection, Vector3.zero);
+#pragma warning restore 0618
 #endif
         }
 
@@ -384,7 +379,9 @@ namespace Microsoft.MixedReality.Toolkit.Experimental.Utilities
             debugPlane.Center = planePosition;
             debugPlane.Normal = -gazeNormal;
 #elif UNITY_WSA
+#pragma warning disable 0618
             HolographicSettings.SetFocusPointForFrame(planePosition, -gazeNormal, Vector3.zero);
+#pragma warning restore 0618
 #endif
         }
 
