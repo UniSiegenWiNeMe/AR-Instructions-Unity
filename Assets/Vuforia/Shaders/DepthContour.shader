@@ -5,71 +5,83 @@ Vuforia is a trademark of PTC Inc., registered in the United States and other
 countries.
 =========================================================================*/
 Shader "Custom/DepthContour" {
-    Properties{
-        _ContourColor("Contour Color", Color) = (1,1,1,1)
-        _SurfaceColor("Surface Color", Color) = (0.5,0.5,0.5,1)
-        _DepthThreshold("Depth Threshold", Float) = 0.002
+
+    Properties 
+    {
+        _SilhouetteSize ("Size", Float) = 1
+        _SilhouetteColor ("Color", Color) = (1,1,1,1)
     }
+    
+    CGINCLUDE
+    #include "UnityCG.cginc"
 
-    SubShader {
-        Tags { "Queue" = "Geometry" "RenderType" = "Transparent" }
+    struct v2f 
+    {
+        float4 position : POSITION;
+        float4 color : COLOR;
+        UNITY_VERTEX_OUTPUT_STEREO
+    };
 
-        Pass {
+    struct vertIn 
+    {
+        float4 position : POSITION;
+        float3 normal : NORMAL;
+        UNITY_VERTEX_INPUT_INSTANCE_ID
+    };
+
+    uniform float _SilhouetteSize;
+    uniform float4 _SilhouetteColor;
+    
+    ENDCG
+
+    SubShader 
+    {
+        Tags { "Queue" = "Geometry" }
+        
+        Pass 
+        { 
             Cull Back
-            Blend SrcAlpha OneMinusSrcAlpha
+            Blend Zero One
+        }
+        
+        Pass 
+        {
+            Cull Front
 
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #include "UnityCG.cginc"
 
-            uniform sampler2D _CameraDepthTexture;
-            uniform float4 _ContourColor;
-            uniform float4 _SurfaceColor;
-            uniform float _DepthThreshold;
-
-            struct v2f {
-                float4 pos : SV_POSITION;
-                float4 screenPos : TEXCOORD0;
-                float depth : TEXCOORD1;
-            };
-
-            v2f vert(appdata_base v) 
+            v2f vert(vertIn input) 
             {
-                v2f o;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                o.screenPos = ComputeScreenPos(o.pos);
+                v2f output;
+
+                UNITY_SETUP_INSTANCE_ID(input); //Insert
+                UNITY_INITIALIZE_OUTPUT(v2f, output); //Insert
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output); //Insert
+    
+                // unmodified projected position of the vertex
+                output.position = UnityObjectToClipPos(input.position);
+                output.color = _SilhouetteColor;
+
+                // calculate silhouette in image space
+                float3 normal = mul((float3x3)UNITY_MATRIX_IT_MV, input.normal);
+                float2 normalScreen = TransformViewToProjection(normal.xy);
                 
-                COMPUTE_EYEDEPTH(o.depth);
-                o.depth = (o.depth - _ProjectionParams.y) / (_ProjectionParams.z - _ProjectionParams.y);
-                return o;
+                output.position /= output.position.w; 
+                
+                float2 screenOffset = _SilhouetteSize * normalize(normalScreen);
+                output.position.x += screenOffset.x / (_ScreenParams.x * 0.5);
+                output.position.y += screenOffset.y / (_ScreenParams.y * 0.5);
+                
+                return output;
             }
 
-            half4 frag(v2f i) : COLOR 
+            half4 frag(v2f input) :COLOR 
             {
-                float2 uv = i.screenPos.xy / i.screenPos.w;
-                float du = 1.0 / _ScreenParams.x;
-                float dv = 1.0 / _ScreenParams.y;
-                float2 uv_X1 = uv + float2(du, 0.0);
-                float2 uv_Y1 = uv + float2(0.0, dv);
-                float2 uv_X2 = uv + float2(-du, 0.0);
-                float2 uv_Y2 = uv + float2(0.0, -dv);
-
-                float depth0 = Linear01Depth(UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, uv)));
-                float depthX1 = Linear01Depth(UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, uv_X1)));
-                float depthY1 = Linear01Depth(UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, uv_Y1)));
-                float depthX2 = Linear01Depth(UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, uv_X2)));
-                float depthY2 = Linear01Depth(UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, uv_Y2)));
-
-                float farDist = _ProjectionParams.z;
-                float refDepthStep = _DepthThreshold / farDist;
-                float depthStepX = max(abs(depth0 - depthX1), abs(depth0 - depthX2));
-                float depthStepY = max(abs(depth0 - depthY1), abs(depth0 - depthY2));
-                float maxDepthStep = length(float2(depthStepX, depthStepY));
-                half contour = (maxDepthStep > refDepthStep) ? 1.0 : 0.0;
-                return _SurfaceColor * (1.0 - contour) + _ContourColor * contour;
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input); //Insert
+                return input.color;
             }
-
             ENDCG
         }
     }

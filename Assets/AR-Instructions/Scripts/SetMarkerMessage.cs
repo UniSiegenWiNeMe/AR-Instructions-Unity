@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class SetMarkerMessage : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public string MarkerSuccesfullyScannedMessage = "Marker scanned.";
+    public string ScanningMarkerMessage = "Scanning marker ... Please wait.";
     void Start()
     {
         var stabilizedTracking = GetComponentInParent<StabilizedTracking>();
@@ -18,7 +19,7 @@ public class SetMarkerMessage : MonoBehaviour
         var text = GetComponent<TextMeshPro>();
         if (text != null)
         {
-            text.text = "Marker wird gescannt."+System.Environment.NewLine+" Bitte warten.";
+            text.text = ScanningMarkerMessage;
         }
     }
 
@@ -27,7 +28,7 @@ public class SetMarkerMessage : MonoBehaviour
         var text = GetComponent<TextMeshPro>();
         if (text != null)
         {
-            text.text = "Marker erfolgreich gescannt.";
+            text.text = MarkerSuccesfullyScannedMessage;
         }
     }
 

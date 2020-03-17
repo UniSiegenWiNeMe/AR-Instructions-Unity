@@ -7,6 +7,7 @@ Confidential and Proprietary - Protected under copyright and other laws.
 ==============================================================================*/
 
 using UnityEngine;
+using UnityEngine.Events;
 using Vuforia;
 
 /// <summary>
@@ -15,73 +16,118 @@ using Vuforia;
 /// Changes made to this file could be overwritten when upgrading the Vuforia version.
 /// When implementing custom event handler behavior, consider inheriting from this class instead.
 /// </summary>
-public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
+public class DefaultTrackableEventHandler : MonoBehaviour
 {
-    #region PROTECTED_MEMBER_VARIABLES
+    public enum TrackingStatusFilter
+    {
+        Tracked,
+        Tracked_ExtendedTracked,
+        Tracked_ExtendedTracked_Limited
+    }
+
+    /// <summary>
+    /// A filter that can be set to either:
+    /// - Only consider a target if it's in view (TRACKED)
+    /// - Also consider the target if's outside of the view, but the environment is tracked (EXTENDED_TRACKED)
+    /// - Even consider the target if tracking is in LIMITED mode, e.g. the environment is just 3dof tracked.
+    /// </summary>
+    public TrackingStatusFilter StatusFilter = TrackingStatusFilter.Tracked_ExtendedTracked_Limited;
+    public UnityEvent OnTargetFound;
+    public UnityEvent OnTargetLost;
+
 
     protected TrackableBehaviour mTrackableBehaviour;
     protected TrackableBehaviour.Status m_PreviousStatus;
     protected TrackableBehaviour.Status m_NewStatus;
-
-    #endregion // PROTECTED_MEMBER_VARIABLES
-
-    #region UNITY_MONOBEHAVIOUR_METHODS
+    protected bool m_CallbackReceivedOnce = false;
 
     protected virtual void Start()
     {
         mTrackableBehaviour = GetComponent<TrackableBehaviour>();
+
         if (mTrackableBehaviour)
-            mTrackableBehaviour.RegisterTrackableEventHandler(this);
+        {
+            mTrackableBehaviour.RegisterOnTrackableStatusChanged(OnTrackableStatusChanged);
+        }
     }
 
     protected virtual void OnDestroy()
     {
         if (mTrackableBehaviour)
-            mTrackableBehaviour.UnregisterTrackableEventHandler(this);
+        {
+            mTrackableBehaviour.UnregisterOnTrackableStatusChanged(OnTrackableStatusChanged);
+        }
     }
 
-    #endregion // UNITY_MONOBEHAVIOUR_METHODS
-
-    #region PUBLIC_METHODS
-
-    /// <summary>
-    ///     Implementation of the ITrackableEventHandler function called when the
-    ///     tracking state changes.
-    /// </summary>
-    public void OnTrackableStateChanged(
-        TrackableBehaviour.Status previousStatus,
-        TrackableBehaviour.Status newStatus)
+    void OnTrackableStatusChanged(TrackableBehaviour.StatusChangeResult statusChangeResult)
     {
-        m_PreviousStatus = previousStatus;
-        m_NewStatus = newStatus;
-        
-        Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + 
-                  " " + mTrackableBehaviour.CurrentStatus +
-                  " -- " + mTrackableBehaviour.CurrentStatusInfo);
+        m_PreviousStatus = statusChangeResult.PreviousStatus;
+        m_NewStatus = statusChangeResult.NewStatus;
 
-        if (newStatus == TrackableBehaviour.Status.DETECTED ||
-            newStatus == TrackableBehaviour.Status.TRACKED ||
-            newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
+        Debug.LogFormat("Trackable {0} {1} -- {2}",
+            mTrackableBehaviour.TrackableName,
+            mTrackableBehaviour.CurrentStatus,
+            mTrackableBehaviour.CurrentStatusInfo);
+
+        HandleTrackableStatusChanged();
+    }
+
+    protected virtual void HandleTrackableStatusChanged()
+    {
+        if (!ShouldBeRendered(m_PreviousStatus) &&
+            ShouldBeRendered(m_NewStatus))
         {
             OnTrackingFound();
         }
-        else if (previousStatus == TrackableBehaviour.Status.TRACKED &&
-                 newStatus == TrackableBehaviour.Status.NO_POSE)
+        else if (ShouldBeRendered(m_PreviousStatus) &&
+                 !ShouldBeRendered(m_NewStatus))
         {
             OnTrackingLost();
         }
         else
         {
-            // For combo of previousStatus=UNKNOWN + newStatus=UNKNOWN|NOT_FOUND
-            // Vuforia is starting, but tracking has not been lost or found yet
-            // Call OnTrackingLost() to hide the augmentations
-            OnTrackingLost();
+            if (!m_CallbackReceivedOnce && !ShouldBeRendered(m_NewStatus))
+            {
+                // This is the first time we are receiving this callback, and the target is not visible yet.
+                // --> Hide the augmentation.
+                OnTrackingLost();
+            }
         }
+
+        m_CallbackReceivedOnce = true;
     }
 
-    #endregion // PUBLIC_METHODS
+    protected bool ShouldBeRendered(TrackableBehaviour.Status status)
+    {
+        if (status == TrackableBehaviour.Status.DETECTED ||
+            status == TrackableBehaviour.Status.TRACKED)
+        {
+            // always render the augmentation when status is DETECTED or TRACKED, regardless of filter
+            return true;
+        }
 
-    #region PROTECTED_METHODS
+        if (StatusFilter == TrackingStatusFilter.Tracked_ExtendedTracked)
+        {
+            if (status == TrackableBehaviour.Status.EXTENDED_TRACKED)
+            {
+                // also return true if the target is extended tracked
+                return true;
+            }
+        }
+
+        if (StatusFilter == TrackingStatusFilter.Tracked_ExtendedTracked_Limited)
+        {
+            if (status == TrackableBehaviour.Status.EXTENDED_TRACKED ||
+                status == TrackableBehaviour.Status.LIMITED)
+            {
+                // in this mode, render the augmentation even if the target's tracking status is LIMITED.
+                // this is mainly recommended for Anchors.
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     protected virtual void OnTrackingFound()
     {
@@ -103,8 +149,10 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
             foreach (var component in canvasComponents)
                 component.enabled = true;
         }
-    }
 
+        if (OnTargetFound != null)
+            OnTargetFound.Invoke();
+    }
 
     protected virtual void OnTrackingLost()
     {
@@ -126,7 +174,8 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
             foreach (var component in canvasComponents)
                 component.enabled = false;
         }
-    }
 
-    #endregion // PROTECTED_METHODS
+        if (OnTargetLost != null)
+            OnTargetLost.Invoke();
+    }
 }
