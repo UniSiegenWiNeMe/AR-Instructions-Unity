@@ -46,8 +46,9 @@ public class MainPanelController : MonoBehaviour
     public OpenKeyboard Keyboard;
 
     public GameObject InsertTextButton;
-    public GameObject FinishButton;
+    public GameObject ExportButton;
 
+    public GameObject HomeButton;
     /// <summary>
     /// this event is triggerd every time some data of the instruction has changed
     /// </summary>
@@ -85,18 +86,20 @@ public class MainPanelController : MonoBehaviour
             //}
 
             NextStepButton.SetActive(true);
-
+            HomeButton.SetActive(false);
             Keyboard.TextTyped.AddListener(NewText);
         }
         else
         {
             InsertTextButton.SetActive(false);
-            FinishButton.SetActive(false);
+            ExportButton.SetActive(false);
+            HomeButton.SetActive(false);
 
             LoadStep(_instructionManager.GetCurrentStep());
             if (!_instructionManager.NextStepAvailabe())
             {
                 NextStepButton.SetActive(false);
+                HomeButton.SetActive(true);
             }
         }
         PreviousStepButton.SetActive(false);
@@ -146,8 +149,10 @@ public class MainPanelController : MonoBehaviour
     /// </summary>
     public void NextStep()
     {
-        // is this alway necessary?
-        _instructionManager.Save();
+        if (_mode == MenuMode.Record)
+        {
+            _instructionManager.Save();
+        }
 
         ClearItems();
 
@@ -166,6 +171,7 @@ public class MainPanelController : MonoBehaviour
             if (!_instructionManager.NextStepAvailabe() && _mode == MenuMode.Replay)
             {
                 NextStepButton.SetActive(false);
+                HomeButton.SetActive(true);
             }
         }
 
@@ -198,7 +204,7 @@ public class MainPanelController : MonoBehaviour
 
         PreviousStepButton.SetActive(_instructionManager.PreviousStepAvailabe());
         NextStepButton.SetActive(true);
-
+        HomeButton.SetActive(false);
         SetStepCounterText();
     }
 

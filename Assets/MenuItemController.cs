@@ -46,8 +46,7 @@ public class MenuItemController : MonoBehaviour
 
     public void Selected()
     {
-        InstructionManager.Instance.Instruction = _instruction;
-
+        InstructionManager.Instance.SelectInstruction(_instruction);
         InstructionSelected?.Invoke(this, new InstructionSelectionEventArgs(_instruction));
     }
 
