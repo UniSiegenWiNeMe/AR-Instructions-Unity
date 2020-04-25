@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.MixedReality.Toolkit.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,8 +70,14 @@ public class GUIManager : MonoBehaviour
 
     private void FootMenu_OnHomeClick()
     {
+        Reset();
+    }
+
+    private void Reset()
+    {
         InstructionManager.Instance.Reset();
         Destroy(_enterName);
+        _instructionMenu.GetComponentInChildren<MainPanelController>().HomeButton.GetComponent<Interactable>().OnClick.RemoveAllListeners();
         Destroy(_instructionMenu);
         DestroyAllSpawnedItems();
         DestroySelectMenu();
@@ -113,7 +120,6 @@ public class GUIManager : MonoBehaviour
         ShowInstructionMenu(_selectMenu.GetComponent<SelectInstructionMenuController>().Mode);
 
         DestroySelectMenu();
-
     }
 
     private void ShowInstructionMenu(MenuMode mode)
@@ -124,6 +130,7 @@ public class GUIManager : MonoBehaviour
         if (mode == MenuMode.Replay)
         {
             _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Replay, ContainerForSpawnedItems);
+            _instructionMenu.GetComponentInChildren<MainPanelController>().HomeButton.GetComponent<Interactable>().OnClick.AddListener(Reset);
         }
         else
         {
