@@ -2068,7 +2068,7 @@ namespace Microsoft.MixedReality.Toolkit.UI
         }
 
         private void SetHighlighted(Transform activeHandle)
-        {
+                      {
             //turn off all balls
             if (balls != null)
             {
