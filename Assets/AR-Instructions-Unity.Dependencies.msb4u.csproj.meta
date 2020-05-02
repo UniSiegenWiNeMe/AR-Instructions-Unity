@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 2bbdca12025d2f94ba4f2d746e3b9644
+guid: ee43d237db1a5104591b271c9d2b15bc
 ScriptedImporter:
-  internalIDToNameTable: []
+  fileIDToRecycleName:
+    11400000: AR-Instructions-Unity.Dependencies.msb4u
   externalObjects: {}
-  serializedVersion: 2
   userData: 
   assetBundleName: 
   assetBundleVariant: 

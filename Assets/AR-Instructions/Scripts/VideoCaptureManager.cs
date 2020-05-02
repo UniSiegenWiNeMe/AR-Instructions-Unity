@@ -7,6 +7,9 @@ using System;
 using TMPro;
 using UnityEngine.Events;
 
+using UnityEngine.XR.WSA.WebCam;
+
+
 public class VideoCaptureManager : MonoBehaviour
 {
     public float MaxRecordingTime = 120.0f;
@@ -19,7 +22,7 @@ public class VideoCaptureManager : MonoBehaviour
     public UnityEvent OnVideoRecordingStarted;
 
 
-    private UnityEngine.Windows.WebCam.VideoCapture _videoCapture = null;
+    private VideoCapture _videoCapture = null;
     private Resolution _cameraResolution;
     private float _cameraFramerate;
     private DateTime _startRecordingTime = DateTime.MaxValue;
@@ -44,7 +47,7 @@ public class VideoCaptureManager : MonoBehaviour
         _cameraResolution = new Resolution() { width = 896, height = 504 };
         try
         {
-            _cameraFramerate = UnityEngine.Windows.WebCam.VideoCapture.GetSupportedFrameRatesForResolution(_cameraResolution).OrderByDescending((fps) => fps).First();
+            _cameraFramerate = VideoCapture.GetSupportedFrameRatesForResolution(_cameraResolution).OrderByDescending((fps) => fps).First();
         }
         catch (Exception)
         {
@@ -131,20 +134,20 @@ public class VideoCaptureManager : MonoBehaviour
 
     private void StartVideoCapture()
     {
-        UnityEngine.Windows.WebCam.VideoCapture.CreateAsync(false, OnVideoCaptureCreated);
+        VideoCapture.CreateAsync(false, OnVideoCaptureCreated);
     }
 
-    private void OnVideoCaptureCreated(UnityEngine.Windows.WebCam.VideoCapture videoCapture)
+    private void OnVideoCaptureCreated(VideoCapture videoCapture)
     {
         if (videoCapture != null)
         {
             _videoCapture = videoCapture;
-            UnityEngine.Windows.WebCam.CameraParameters cameraParameters = new UnityEngine.Windows.WebCam.CameraParameters();
+            CameraParameters cameraParameters = new CameraParameters();
             cameraParameters.hologramOpacity = 0.0f;
             cameraParameters.frameRate = _cameraFramerate;
             cameraParameters.cameraResolutionWidth = _cameraResolution.width;
             cameraParameters.cameraResolutionHeight = _cameraResolution.height;
-            cameraParameters.pixelFormat = UnityEngine.Windows.WebCam.CapturePixelFormat.BGRA32;
+            cameraParameters.pixelFormat = CapturePixelFormat.BGRA32;
 
             _cameraBorderController.SetRecordingMaterial();
             _cameraBorderController.Instruction.text = CameraInstructionTextStop;
@@ -157,7 +160,7 @@ public class VideoCaptureManager : MonoBehaviour
 
 
             _videoCapture.StartVideoModeAsync(cameraParameters,
-                                               UnityEngine.Windows.WebCam.VideoCapture.AudioState.ApplicationAndMicAudio,
+                                               VideoCapture.AudioState.ApplicationAndMicAudio,
                                                OnStartedVideoCaptureMode);
         }
         else
@@ -167,7 +170,7 @@ public class VideoCaptureManager : MonoBehaviour
         }
     }
 
-    void OnStartedVideoCaptureMode(UnityEngine.Windows.WebCam.VideoCapture.VideoCaptureResult result)
+    void OnStartedVideoCaptureMode(VideoCapture.VideoCaptureResult result)
     {
         if (result.success)
         {
@@ -181,7 +184,7 @@ public class VideoCaptureManager : MonoBehaviour
         }
     }
 
-    void OnStoppedVideoCaptureMode(UnityEngine.Windows.WebCam.VideoCapture.VideoCaptureResult result)
+    void OnStoppedVideoCaptureMode(VideoCapture.VideoCaptureResult result)
     {
         _takingVideo = false;
         _videoCapture = null;
@@ -191,13 +194,13 @@ public class VideoCaptureManager : MonoBehaviour
         OnVideoFinished?.Invoke(_fileName);
     }
 
-    void OnStartedRecordingVideo(UnityEngine.Windows.WebCam.VideoCapture.VideoCaptureResult result)
+    void OnStartedRecordingVideo(VideoCapture.VideoCaptureResult result)
     {
         m_stopRecordingTimer = Time.time + MaxRecordingTime;
         OnVideoRecordingStarted?.Invoke();
     }
 
-    void OnStoppedRecordingVideo(UnityEngine.Windows.WebCam.VideoCapture.VideoCaptureResult result)
+    void OnStoppedRecordingVideo(VideoCapture.VideoCaptureResult result)
     {
         _videoCapture.StopVideoModeAsync(OnStoppedVideoCaptureMode);
     }

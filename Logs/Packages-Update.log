@@ -24,3 +24,20 @@ The following packages were updated:
   com.unity.xr.windowsmr.metro from version 1.0.15 to 4.2.1
 The following packages were removed:
   com.unity.package-manager-ui@2.0.8
+
+=== Sat May  2 19:36:39 2020
+
+Packages were changed.
+Update Mode: resetToDefaultDependencies
+
+The following packages were removed:
+  com.microsoft.msbuildforunity@0.9.1-20200131.14
+  com.unity.xr.windowsmr.metro@1.0.15
+
+=== Sat May  2 21:15:24 2020
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.analytics from version 3.2.2 to 3.2.3

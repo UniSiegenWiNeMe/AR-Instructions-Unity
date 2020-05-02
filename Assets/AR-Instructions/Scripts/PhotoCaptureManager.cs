@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using UnityEngine.Events;
 using TMPro;
 
+using UnityEngine.XR.WSA.WebCam;
+
 public class PhotoCaptureManager: MonoBehaviour
 {
     public string MediaPath = "media";
@@ -15,7 +17,7 @@ public class PhotoCaptureManager: MonoBehaviour
     public string CameraText = "Air tap to take a photo.";
     public PhotoFinishedEvent OnPhotoFinished;
 
-    private UnityEngine.Windows.WebCam.PhotoCapture _photoCaptureObject = null;
+    private PhotoCapture _photoCaptureObject = null;
     private Resolution _cameraResolution;
     private bool _takingPicture = false;
     private string _fullPathFileName;
@@ -25,11 +27,9 @@ public class PhotoCaptureManager: MonoBehaviour
     private CameraBorderController _cameraBorderController;
     private string _fileName;
 
-    
-
     void Start()
     {
-        _cameraResolution = UnityEngine.Windows.WebCam.PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
+        _cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
         _mediaPath = Path.Combine(Application.persistentDataPath, MediaPath);
 
         var mainCameraGameObject = GameObject.Find("Main Camera");
@@ -62,16 +62,16 @@ public class PhotoCaptureManager: MonoBehaviour
     public void TakePicture()
     {
         // Create a PhotoCapture object
-        UnityEngine.Windows.WebCam.PhotoCapture.CreateAsync(false, delegate (UnityEngine.Windows.WebCam.PhotoCapture captureObject)
+        PhotoCapture.CreateAsync(false, delegate (PhotoCapture captureObject)
         {
             if (captureObject != null)
             {
                 _photoCaptureObject = captureObject;
-                UnityEngine.Windows.WebCam.CameraParameters cameraParameters = new UnityEngine.Windows.WebCam.CameraParameters();
+               CameraParameters cameraParameters = new CameraParameters();
                 cameraParameters.hologramOpacity = 0.0f;
                 cameraParameters.cameraResolutionWidth = _cameraResolution.width;
                 cameraParameters.cameraResolutionHeight = _cameraResolution.height;
-                cameraParameters.pixelFormat = UnityEngine.Windows.WebCam.CapturePixelFormat.BGRA32;
+                cameraParameters.pixelFormat = CapturePixelFormat.BGRA32;
 
                 if (!Directory.Exists(_mediaPath))
                 {
@@ -83,10 +83,10 @@ public class PhotoCaptureManager: MonoBehaviour
 
                 _cameraBorderController.SetRecordingMaterial();
                 // Activate the camera
-                _photoCaptureObject.StartPhotoModeAsync(cameraParameters, delegate (UnityEngine.Windows.WebCam.PhotoCapture.PhotoCaptureResult result)
+                _photoCaptureObject.StartPhotoModeAsync(cameraParameters, delegate (PhotoCapture.PhotoCaptureResult result)
                 {
                 // Take a picture
-                _photoCaptureObject.TakePhotoAsync(_fullPathFileName, UnityEngine.Windows.WebCam.PhotoCaptureFileOutputFormat.JPG, OnCapturedPhotoToDisk);
+                _photoCaptureObject.TakePhotoAsync(_fullPathFileName, PhotoCaptureFileOutputFormat.JPG, OnCapturedPhotoToDisk);
                 });
             }
             else
@@ -97,7 +97,7 @@ public class PhotoCaptureManager: MonoBehaviour
         });
     }
 
-    void OnCapturedPhotoToDisk(UnityEngine.Windows.WebCam.PhotoCapture.PhotoCaptureResult result)
+    void OnCapturedPhotoToDisk(PhotoCapture.PhotoCaptureResult result)
     {
         if (result.success)
         {
@@ -111,7 +111,7 @@ public class PhotoCaptureManager: MonoBehaviour
     }
 
     
-    void OnStoppedPhotoMode(UnityEngine.Windows.WebCam.PhotoCapture.PhotoCaptureResult result)
+    void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
     {
         // Shutdown the photo capture resource
         _photoCaptureObject.Dispose();

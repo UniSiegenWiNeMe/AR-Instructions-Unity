@@ -26,9 +26,7 @@
 
   <ItemGroup>
     <!--PROJECT_REFERENCE_TEMPLATE_START-->
-    <ProjectReference Include="C:\Users\FlorianJasche\Documents\GitHub\AR-Instructions-Unity\Assets\MixedRealityToolkit.Providers\WindowsMixedReality\Shared\DotNetAdapter\DotNetAdapter.csproj" Condition="">
-        <!--PRIVATE_REFERENCE_TEMPLATE_START--><!--PRIVATE_REFERENCE_TEMPLATE_END-->
-    </ProjectReference>
+    
     <!--PROJECT_REFERENCE_TEMPLATE_END-->
   </ItemGroup>
 </Project>
