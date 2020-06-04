@@ -86,6 +86,13 @@ public class SerializableTransform
             transform.localScale = new Vector3(Scale[0], Scale[1], Scale[2]);
         }
     }
+
+    internal void AddNewOffset(Vector3 localPosition)
+    {
+        Position[0] += localPosition.x;
+        Position[1] += localPosition.y;
+        Position[2] += localPosition.z;
+    }
 }
 
 [System.Serializable]

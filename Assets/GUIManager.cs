@@ -42,10 +42,16 @@ public class GUIManager : MonoBehaviour
         _footMenu = Instantiate(FootMenuPrefab);
         _footMenu.GetComponent<FootMenuController>().HomeInteractable.OnClick.AddListener(FootMenu_OnHomeClick);
         _footMenu.GetComponent<FootMenuController>().MarkerScanInteractable.OnClick.AddListener(FootMenu_OnMarkerScanClick);
+        _footMenu.GetComponent<FootMenuController>().OffsetInteractable.OnClick.AddListener(FootMenu_OnOffsetClick);
 
         CreateSelectMenu();
         
 
+    }
+
+    private void FootMenu_OnOffsetClick()
+    {
+        throw new NotImplementedException();
     }
 
     private void OnCompleted(object sender, EventArgs e)
@@ -118,8 +124,8 @@ public class GUIManager : MonoBehaviour
     private void SelectInstructionMenu_OnSelect(object sender, InstructionSelectionEventArgs e)
     {
         ShowInstructionMenu(_selectMenu.GetComponent<SelectInstructionMenuController>().Mode);
-        var tmp = ParentForInstructionHolograms.transform;
-        InstructionManager.Instance.Instruction.OffsetForHolograms.ToTransform(ref tmp);
+        ParentForInstructionHolograms.GetComponent<OffsetController>().SetTransform(InstructionManager.Instance.Instruction.OffsetForHolograms);
+        
         DestroySelectMenu();
     }
 

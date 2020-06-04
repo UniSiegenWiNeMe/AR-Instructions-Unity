@@ -460,6 +460,12 @@ public class InstructionManager : Singleton<InstructionManager>
         return AllFullFileNames.Skip(skip).Take(pageSize);
     }
 
+    internal void OffsetChanged(Vector3 localPosition)
+    {
+        Instruction.OffsetForHolograms.AddNewOffset(localPosition);
+        Save();
+    }
+
 
     //public IEnumerable<string> GetInstructionNames(int skip, int take)
     //{
