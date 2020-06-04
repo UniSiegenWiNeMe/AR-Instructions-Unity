@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -112,13 +112,43 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!43 &207608159
+--- !u!1 &54107486
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 54107487}
+  m_Layer: 0
+  m_Name: Offset
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &54107487
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54107486}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1060299688}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!43 &114334230
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Vumark45488
+  m_Name: Vumark43326
   serializedVersion: 9
   m_SubMeshes:
   - serializedVersion: 2
@@ -129,8 +159,8 @@ Mesh:
     firstVertex: 0
     vertexCount: 4
     localAABB:
-      m_Center: {x: 0, y: 0, z: 0.0013095438}
-      m_Extent: {x: 0.49999997, y: 0, z: 0.49999997}
+      m_Center: {x: 0, y: 0, z: 0.00026191026}
+      m_Extent: {x: 0.1, y: 0, z: 0.1}
   m_Shapes:
     vertices: []
     shapes: []
@@ -206,7 +236,7 @@ Mesh:
       format: 0
       dimension: 0
     m_DataSize: 128
-    _typelessdata: df4fcdbd00000000df4fcdbd000000000000803f000000000000000000000000df4fcdbd00000000df4fcd3d000000000000803f00000000000000000000803fdf4fcd3d00000000df4fcdbd000000000000803f000000000000803f00000000df4fcd3d00000000df4fcd3d000000000000803f000000000000803f0000803f
+    _typelessdata: cdccccbd00000000cdccccbd000000000000803f000000000000000000000000cdccccbd00000000cdcccc3d000000000000803f00000000000000000000803fcdcccc3d00000000cdccccbd000000000000803f000000000000803f00000000cdcccc3d00000000cdcccc3d000000000000803f000000000000803f0000803f
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -260,8 +290,8 @@ Mesh:
       m_BitSize: 0
     m_UVInfo: 0
   m_LocalAABB:
-    m_Center: {x: 0, y: 0, z: 0.0013095438}
-    m_Extent: {x: 0.49999997, y: 0, z: 0.49999997}
+    m_Center: {x: 0, y: 0, z: 0.00026191026}
+    m_Extent: {x: 0.1, y: 0, z: 0.1}
   m_MeshUsageFlags: 0
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
@@ -340,7 +370,7 @@ MonoBehaviour:
     type: 3}
   EnterNamePrefab: {fileID: 5100307917357359032, guid: 4d300a77b3c4f6a44909fb68e3296a77,
     type: 3}
-  ContainerForSpawnedItems: {fileID: 1060299687}
+  ParentForInstructionHolograms: {fileID: 54107486}
   StabilizedTracking: {fileID: 1471603310}
 --- !u!4 &321913169
 Transform:
@@ -457,6 +487,63 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1001 &740936140
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 100000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_Name
+      value: 20-04-23_UTS_RBV_35_Ruestposition_nur_Werkzeuge
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.0069
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.201
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.5186
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a337c2c851c9e4a44bf857b5014035a3, type: 3}
 --- !u!1 &937055548
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,7 +654,7 @@ GameObject:
   - component: {fileID: 1060299688}
   - component: {fileID: 1060299689}
   m_Layer: 0
-  m_Name: Container
+  m_Name: HologramContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -583,7 +670,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 54107487}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1084,7 +1172,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471603309}
-  m_Mesh: {fileID: 207608159}
+  m_Mesh: {fileID: 114334230}
 --- !u!23 &1471603312
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1134,23 +1222,23 @@ MonoBehaviour:
   m_Script: {fileID: -1881939161, guid: bab6fa851cf5a1a4bba3cec5f191cb8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mTrackableName: '--- EMPTY ---'
+  mTrackableName: MiniWizardVumark20x20
   mInitializedInEditor: 1
-  mDataSetPath: '--- EMPTY ---'
+  mDataSetPath: Vuforia/MiniWizard.xml
   mPreserveChildSize: 0
   mAspectRatio: 1
-  mWidth: 0.2005
-  mHeight: 0.2005
-  mPreviewImage: 
-  mIdType: 0
-  mIdLength: 0
+  mWidth: 0.2
+  mHeight: 0.2
+  mPreviewImage: Assets/Editor/Vuforia/MiniWizard/11f962a629914f0aaf822fb08c460bb4_preview.png
+  mIdType: 2
+  mIdLength: 10
   mBoundingBox:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1
-    height: 1
-  mOrigin: {x: 0.5, y: 0.5}
+    width: 337.522
+    height: 337.522
+  mOrigin: {x: 168.761, y: 168.319}
   mTrackingFromRuntimeAppearance: 0
 --- !u!4 &1471603314
 Transform:

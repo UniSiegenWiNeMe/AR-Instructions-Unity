@@ -1,23 +1,23 @@
 {
-  "scopedRegistries": [
-    {
-      "name": "MS Build for Unity",
-      "url": "https://pkgs.dev.azure.com/UnityDeveloperTools/MSBuildForUnity/_packaging/UnityDeveloperTools/npm/registry",
-      "scopes": [
-        "com.microsoft"
-      ]
-    },
-    {
-      "name": "Vuforia",
-      "url": "https://registry.packages.developer.vuforia.com/",
-      "scopes": [
-        "com.ptc.vuforia"
-      ]
-    }
-  ],
-  "dependencies": {
-    "com.microsoft.msbuildforunity": "0.9.1-20200131.14",
+    "scopedRegistries": [
+        {
+            "name": "MS Build for Unity",
+            "url": "https://pkgs.dev.azure.com/UnityDeveloperTools/MSBuildForUnity/_packaging/UnityDeveloperTools/npm/registry",
+            "scopes": [
+                "com.microsoft"
+            ]
+        },
+        {
+            "name": "Vuforia",
+            "url": "https://registry.packages.developer.vuforia.com/",
+            "scopes": [
+                "com.ptc.vuforia"
+            ]
+        }
+    ],
+    "dependencies": {
     "com.ptc.vuforia.engine": "9.0.12",
+    "com.microsoft.msbuildforunity": "0.9.1-20200131.14",
     "com.unity.ads": "2.0.8",
     "com.unity.analytics": "3.2.3",
     "com.unity.collab-proxy": "1.2.15",

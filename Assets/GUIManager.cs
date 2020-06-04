@@ -11,7 +11,7 @@ public class GUIManager : MonoBehaviour
     public GameObject FootMenuPrefab;
     public GameObject InstructionMenuPrefab;
     public GameObject EnterNamePrefab;
-    public GameObject ContainerForSpawnedItems;
+    public GameObject ParentForInstructionHolograms;
     public StabilizedTracking StabilizedTracking;
 
 
@@ -31,9 +31,9 @@ public class GUIManager : MonoBehaviour
             throw new ArgumentException("Missing Prefab in GUIManager!");
         }
 
-        if (ContainerForSpawnedItems == null)
+        if (ParentForInstructionHolograms == null)
         {
-            ContainerForSpawnedItems = GameObject.Find("Container");
+            ParentForInstructionHolograms = GameObject.Find("Offset");
         }
 
         InstructionManager.Instance.ImportCompleted += OnCompleted;
@@ -86,9 +86,9 @@ public class GUIManager : MonoBehaviour
 
     private void DestroyAllSpawnedItems()
     {
-        while (ContainerForSpawnedItems.transform.childCount > 0)
+        while (ParentForInstructionHolograms.transform.childCount > 0)
         {
-            DestroyImmediate(ContainerForSpawnedItems.transform.GetChild(0).gameObject);
+            DestroyImmediate(ParentForInstructionHolograms.transform.GetChild(0).gameObject);
         }
     }
 
@@ -118,7 +118,8 @@ public class GUIManager : MonoBehaviour
     private void SelectInstructionMenu_OnSelect(object sender, InstructionSelectionEventArgs e)
     {
         ShowInstructionMenu(_selectMenu.GetComponent<SelectInstructionMenuController>().Mode);
-
+        var tmp = ParentForInstructionHolograms.transform;
+        InstructionManager.Instance.Instruction.OffsetForHolograms.ToTransform(ref tmp);
         DestroySelectMenu();
     }
 
@@ -129,12 +130,12 @@ public class GUIManager : MonoBehaviour
 
         if (mode == MenuMode.Replay)
         {
-            _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Replay, ContainerForSpawnedItems);
+            _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Replay, ParentForInstructionHolograms);
             _instructionMenu.GetComponentInChildren<MainPanelController>().HomeButton.GetComponent<Interactable>().OnClick.AddListener(Reset);
         }
         else
         {
-            _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Record, ContainerForSpawnedItems);
+            _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Record, ParentForInstructionHolograms);
         }
     }
 
