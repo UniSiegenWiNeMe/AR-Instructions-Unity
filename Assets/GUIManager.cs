@@ -92,8 +92,11 @@ public class GUIManager : MonoBehaviour
     {
         InstructionManager.Instance.Reset();
         Destroy(_enterName);
-        _instructionMenu.GetComponentInChildren<MainPanelController>().HomeButton.GetComponent<Interactable>().OnClick.RemoveAllListeners();
-        Destroy(_instructionMenu);
+        if (_instructionMenu != null)
+        {
+            _instructionMenu.GetComponentInChildren<MainPanelController>().HomeButton.GetComponent<Interactable>().OnClick.RemoveAllListeners();
+            Destroy(_instructionMenu);
+        }
         DestroyAllSpawnedItems();
         DestroySelectMenu();
         CreateSelectMenu();
