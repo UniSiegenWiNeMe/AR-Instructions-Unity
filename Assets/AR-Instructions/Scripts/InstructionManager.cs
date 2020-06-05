@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
+﻿using Assets.AR_Instructions.Scripts;
+using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,35 +8,10 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public enum ActionType
-{
-    InstructionStarted,
-    InstructionCompleted,
-    StepForward,
-    StepBackward,
-    VideoPaused,
-    VideoRestarted,
-    VideoUnpaused,
-    VideoStarted
-}
-
-public class ActionLogEntry
-{
-    public int StepNumber;
-    public ActionType ActionType;
-    public DateTime Timestamp;
-
-    public ActionLogEntry(int stepNumber, ActionType actionType, DateTime timestamp)
-    {
-        StepNumber = stepNumber;
-        ActionType = actionType;
-        Timestamp = timestamp;
-    }
-}
 
 public class InstructionManager : Singleton<InstructionManager>
 {
-    public List<ActionLogEntry> ActionLog = new List<ActionLogEntry>();
+    public ActionLog ActionLog = new ActionLog();
 
     public event EventHandler ImportCompleted;
 
@@ -375,68 +351,12 @@ public class InstructionManager : Singleton<InstructionManager>
     {
         ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.InstructionCompleted, DateTime.Now));
         Instruction = null;
-        ExportActionLog(ActionLog);
-        ActionLog = new List<ActionLogEntry>();
+        ActionLog.Export();
         CurrentStepNumber = 0;
         _toolTipTextCounter = 1;
     }
 
-    private void ExportActionLog(List<ActionLogEntry> actionLog)
-    {
-        StringBuilder sb = new StringBuilder();
-
-        foreach (var action in actionLog)
-        {
-            var s = String.Format("{0};{1};{2}",
-                          action.StepNumber,
-                          action.ActionType,
-                          action.Timestamp);
-            s += Environment.NewLine;
-            sb.Append(s);
-        }
-
-        
-
-        var filteredActionLog = actionLog.Where(x => x.ActionType == ActionType.StepBackward ||
-        x.ActionType == ActionType.StepForward ||
-        x.ActionType == ActionType.InstructionCompleted ||
-        x.ActionType == ActionType.InstructionStarted).OrderBy(x => x.Timestamp).ToList();
-
-        Dictionary<int, TimeSpan> tmp = new Dictionary<int, TimeSpan>();
-        for (int i = 0; i < filteredActionLog.Count; i++)
-        {
-            if(i > 0)
-            {
-                if (!tmp.ContainsKey(filteredActionLog[i].StepNumber))
-                {
-                    var timespan = filteredActionLog[i].Timestamp - filteredActionLog[i - 1].Timestamp;
-                    tmp.Add(filteredActionLog[i].StepNumber, timespan);
-                }
-                else
-                {
-                    var timespan = filteredActionLog[i].Timestamp - filteredActionLog[i - 1].Timestamp;
-                    tmp[filteredActionLog[i].StepNumber] = tmp[filteredActionLog[i].StepNumber].Add(timespan);
-                }
-            }
-        }
-
-        
-
-        foreach (var keyValuePair in tmp)
-        {
-            var s = String.Format("{0};{1}",
-                          keyValuePair.Key,
-                          keyValuePair.Value);
-            s += Environment.NewLine;
-            sb.Append(s);
-        }
-
-        var totalTime = actionLog.Last().Timestamp - actionLog[0].Timestamp;
-        sb.Append("Totaltime:" + totalTime);
-
-        System.IO.File.WriteAllText(Path.Combine(Application.persistentDataPath,"ActionLog-"+DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss") +".txt"), sb.ToString());
-
-    }
+    
 
     public List<string> GetAllInstructionFiles()
     {
