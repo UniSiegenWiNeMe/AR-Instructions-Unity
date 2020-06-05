@@ -13,12 +13,13 @@ public class GUIManager : MonoBehaviour
     public GameObject EnterNamePrefab;
     public GameObject ParentForInstructionHolograms;
     public StabilizedTracking StabilizedTracking;
-
+    public GameObject OffsetHandler;
 
     private GameObject _selectMenu;
     private GameObject _footMenu;
     private GameObject _instructionMenu;
     private GameObject _enterName;
+    private MenuMode _mode = MenuMode.Replay;
 
 
     public void Start()
@@ -51,7 +52,7 @@ public class GUIManager : MonoBehaviour
 
     private void FootMenu_OnOffsetClick()
     {
-        throw new NotImplementedException();
+        OffsetHandler.SetActive(true);
     }
 
     private void OnCompleted(object sender, EventArgs e)
@@ -66,6 +67,14 @@ public class GUIManager : MonoBehaviour
         _selectMenu.GetComponent<SelectInstructionMenuController>().CreateNewInstructionInteractable.OnClick.AddListener(SelectInstructionMenu_OnCreateNewInstructionClick);
         _selectMenu.GetComponent<SelectInstructionMenuController>().ImportInstructionInteractable.OnClick.AddListener(SelectInstructionMenu_OnImportInstructionClick);
         _selectMenu.GetComponent<SelectInstructionMenuController>().InstructionSelected += SelectInstructionMenu_OnSelect;
+        _selectMenu.GetComponent<SelectInstructionMenuController>().ModeChanged += SelectInstructionMenu_ModeChanged;
+    }
+
+    private void SelectInstructionMenu_ModeChanged(object sender, ModeChangedEventArgs e)
+    {
+        _mode = e.Mode;
+
+        _footMenu.GetComponent<FootMenuController>().ChangeMode(_mode);
     }
 
     private void FootMenu_OnMarkerScanClick()

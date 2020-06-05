@@ -24,6 +24,7 @@ public class SelectInstructionMenuController : MonoBehaviour
     public Interactable ImportInstructionInteractable;
 
     public event EventHandler<InstructionSelectionEventArgs> InstructionSelected;
+    public event EventHandler<ModeChangedEventArgs> ModeChanged;
 
     private int _currentPage = 1;
     private int _maxPageNumber;
@@ -62,6 +63,7 @@ public class SelectInstructionMenuController : MonoBehaviour
         {
             item.gameObject.GetComponent<MenuItemController>().SetMode(mode);
         }
+        ModeChanged?.Invoke(this, new ModeChangedEventArgs(Mode));
     }
 
     private void LoadItemsToMenu(IEnumerable<string> items, bool clearBeforeLoad = false)
@@ -158,4 +160,12 @@ public class SelectInstructionMenuController : MonoBehaviour
     
 }
 
+public class ModeChangedEventArgs
+{
+    public MenuMode Mode;
 
+    public ModeChangedEventArgs(MenuMode mode)
+    {
+        Mode = mode;
+    }
+}
