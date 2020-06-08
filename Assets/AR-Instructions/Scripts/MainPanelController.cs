@@ -263,8 +263,8 @@ public class MainPanelController : MonoBehaviour
                 var boundingBox = element.GetComponentInChildren<BoundingBox>();
                 boundingBox.RotateStopped.AddListener(OnItemManipulated);
                 boundingBox.ScaleStopped.AddListener(OnItemManipulated);
-                var manipulationManager = element.GetComponentInChildren<ManipulationHandler>();
-                manipulationManager.OnManipulationEnded.AddListener(OnItemManipulated);
+                var objectManipulator = element.GetComponentInChildren<ObjectManipulator>();
+                objectManipulator.OnManipulationEnded.AddListener(OnItemManipulated);
             }
             else
             {

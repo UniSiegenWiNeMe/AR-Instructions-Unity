@@ -148,8 +148,29 @@ public class GUIManager : MonoBehaviour
 
         if (mode == MenuMode.Replay)
         {
-            _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Replay, ParentForInstructionHolograms);
-            _instructionMenu.GetComponentInChildren<MainPanelController>().HomeButton.GetComponent<Interactable>().OnClick.AddListener(Reset);
+            var menuController = _instructionMenu.GetComponent<MenuController>();
+            if (menuController != null)
+            {
+                menuController.Init(MenuMode.Replay, ParentForInstructionHolograms);
+            }
+            else
+            {
+                Debug.Log("menuController is null");
+            }
+
+            var mainPanelController = _instructionMenu.GetComponentInChildren<MainPanelController>();
+            if (mainPanelController != null)
+            {
+                var interactable = mainPanelController.HomeButton.GetComponent<Interactable>();
+                if (interactable != null)
+                {
+                    interactable.OnClick.AddListener(Reset);
+                }
+            }
+            else
+            {
+                Debug.Log("mainPanelController is null");
+            }
         }
         else
         {
