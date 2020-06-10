@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
-using UnityEngine.XR.WSA.WebCam;
+
 using System.IO;
 using System;
 using TMPro;
 using UnityEngine.Events;
+
+using UnityEngine.XR.WSA.WebCam;
+
 
 public class VideoCaptureManager : MonoBehaviour
 {

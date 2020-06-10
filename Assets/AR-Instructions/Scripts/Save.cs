@@ -11,6 +11,7 @@ public class Instruction
     public List<Step> Steps = new List<Step>();
     public String Name;
     public DateTime DateCreated;
+    public SerializableTransform OffsetForHolograms;
 
     public int StepsCount {
         get
@@ -24,6 +25,7 @@ public class Instruction
         Name = name;
         DateCreated = dateCreated;
         Steps = new List<Step>();
+        OffsetForHolograms = new SerializableTransform();
     }
 
     public Instruction()
@@ -31,6 +33,7 @@ public class Instruction
         Name = "default";
         DateCreated = DateTime.Now;
         Steps = new List<Step>();
+        OffsetForHolograms = new SerializableTransform();
     }
 }
 
@@ -82,6 +85,13 @@ public class SerializableTransform
             transform.localRotation = new Quaternion(Rotation[0], Rotation[1], Rotation[2], Rotation[3]);
             transform.localScale = new Vector3(Scale[0], Scale[1], Scale[2]);
         }
+    }
+
+    internal void AddNewOffset(Vector3 localPosition)
+    {
+        Position[0] += localPosition.x;
+        Position[1] += localPosition.y;
+        Position[2] += localPosition.z;
     }
 }
 

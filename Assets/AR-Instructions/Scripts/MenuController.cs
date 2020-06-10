@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Vuforia;
 
 public enum MenuMode
 {
@@ -31,6 +32,7 @@ public class MenuController : MonoBehaviour
         var vumark = GameObject.Find("VuMark");
 
 #if UNITY_EDITOR
+        VuforiaBehaviour.Instance.enabled = false;
         SetMode(_mode);
         return;
 #endif

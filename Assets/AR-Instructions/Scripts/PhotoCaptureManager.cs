@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
-using UnityEngine.XR.WSA.WebCam;
+
 using System.IO;
 using System;
 using System.Threading.Tasks;
 using UnityEngine.Events;
 using TMPro;
+
+using UnityEngine.XR.WSA.WebCam;
 
 public class PhotoCaptureManager: MonoBehaviour
 {
@@ -24,8 +26,6 @@ public class PhotoCaptureManager: MonoBehaviour
     private TextMeshProUGUI _cameraBorderText;
     private CameraBorderController _cameraBorderController;
     private string _fileName;
-
-    
 
     void Start()
     {
@@ -67,7 +67,7 @@ public class PhotoCaptureManager: MonoBehaviour
             if (captureObject != null)
             {
                 _photoCaptureObject = captureObject;
-                CameraParameters cameraParameters = new CameraParameters();
+               CameraParameters cameraParameters = new CameraParameters();
                 cameraParameters.hologramOpacity = 0.0f;
                 cameraParameters.cameraResolutionWidth = _cameraResolution.width;
                 cameraParameters.cameraResolutionHeight = _cameraResolution.height;

@@ -46,12 +46,17 @@ public class MainPanelController : MonoBehaviour
     public OpenKeyboard Keyboard;
 
     public GameObject InsertTextButton;
-    public GameObject FinishButton;
+    public GameObject ExportButton;
+    
+    [SerializeField]
+    private GameObject HomeButton;
 
     /// <summary>
     /// this event is triggerd every time some data of the instruction has changed
     /// </summary>
     public UnityEvent OnNewData;
+
+    public UnityEvent HomeButtonClicked;
 
     /// <summary>
     /// Mode of the menu
@@ -59,6 +64,15 @@ public class MainPanelController : MonoBehaviour
     private MenuMode _mode;
     private InstructionManager _instructionManager;
 
+
+    public void Start()
+    {
+        HomeButton.GetComponent<Interactable>().OnClick.AddListener(() => HomeButtonClicked?.Invoke());
+    }
+    public void OnDestroy()
+    {
+        HomeButton.GetComponent<Interactable>().OnClick.RemoveAllListeners();
+    }
     public void Init(MenuMode mode, GameObject ContainerForSpawnedItems)
     {
         _mode = mode;
@@ -85,18 +99,20 @@ public class MainPanelController : MonoBehaviour
             //}
 
             NextStepButton.SetActive(true);
-
+            HomeButton.SetActive(false);
             Keyboard.TextTyped.AddListener(NewText);
         }
         else
         {
             InsertTextButton.SetActive(false);
-            FinishButton.SetActive(false);
+            ExportButton.SetActive(false);
+            HomeButton.SetActive(false);
 
             LoadStep(_instructionManager.GetCurrentStep());
             if (!_instructionManager.NextStepAvailabe())
             {
                 NextStepButton.SetActive(false);
+                HomeButton.SetActive(true);
             }
         }
         PreviousStepButton.SetActive(false);
@@ -146,8 +162,10 @@ public class MainPanelController : MonoBehaviour
     /// </summary>
     public void NextStep()
     {
-        // is this alway necessary?
-        _instructionManager.Save();
+        if (_mode == MenuMode.Record)
+        {
+            _instructionManager.Save();
+        }
 
         ClearItems();
 
@@ -166,6 +184,7 @@ public class MainPanelController : MonoBehaviour
             if (!_instructionManager.NextStepAvailabe() && _mode == MenuMode.Replay)
             {
                 NextStepButton.SetActive(false);
+                HomeButton.SetActive(true);
             }
         }
 
@@ -198,7 +217,7 @@ public class MainPanelController : MonoBehaviour
 
         PreviousStepButton.SetActive(_instructionManager.PreviousStepAvailabe());
         NextStepButton.SetActive(true);
-
+        HomeButton.SetActive(false);
         SetStepCounterText();
     }
 
@@ -257,8 +276,8 @@ public class MainPanelController : MonoBehaviour
                 var boundingBox = element.GetComponentInChildren<BoundingBox>();
                 boundingBox.RotateStopped.AddListener(OnItemManipulated);
                 boundingBox.ScaleStopped.AddListener(OnItemManipulated);
-                var manipulationManager = element.GetComponentInChildren<ManipulationHandler>();
-                manipulationManager.OnManipulationEnded.AddListener(OnItemManipulated);
+                var objectManipulator = element.GetComponentInChildren<ObjectManipulator>();
+                objectManipulator.OnManipulationEnded.AddListener(OnItemManipulated);
             }
             else
             {

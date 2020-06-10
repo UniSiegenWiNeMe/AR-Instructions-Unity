@@ -1,13 +1,18 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
+﻿using Assets.AR_Instructions.Scripts;
+using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEngine;
+
 
 public class InstructionManager : Singleton<InstructionManager>
 {
+    public ActionLog ActionLog = new ActionLog();
+
     public event EventHandler ImportCompleted;
 
 
@@ -45,7 +50,13 @@ public class InstructionManager : Singleton<InstructionManager>
         get { return Instruction.Steps[CurrentStepNumber].Text; }
         set { Instruction.Steps[CurrentStepNumber].Text = value; }
     }
-    
+
+    public void SelectInstruction(Instruction instruction)
+    {
+        this.Instruction = instruction;
+        ActionLog.Add(new ActionLogEntry(-1, ActionType.InstructionStarted, DateTime.Now));
+    }
+
     /// <summary>
     /// Current step number. Zero based counting
     /// </summary>
@@ -269,6 +280,7 @@ public class InstructionManager : Singleton<InstructionManager>
     /// <returns>false if there is no next step</returns>
     internal bool StepForward()
     {
+        ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.StepForward, DateTime.Now));
         if (CurrentStepNumber + 1 < StepsCount)
         {
             CurrentStepNumber++;
@@ -303,6 +315,7 @@ public class InstructionManager : Singleton<InstructionManager>
     /// <returns></returns>
     internal bool StepBack()
     {
+        ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.StepBackward, DateTime.Now));
         if (CurrentStepNumber - 1 >= 0)
         {
             CurrentStepNumber--;
@@ -336,10 +349,14 @@ public class InstructionManager : Singleton<InstructionManager>
 
     public void Reset()
     {
+        ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.InstructionCompleted, DateTime.Now));
         Instruction = null;
+        ActionLog.Export();
         CurrentStepNumber = 0;
         _toolTipTextCounter = 1;
     }
+
+    
 
     public List<string> GetAllInstructionFiles()
     {
@@ -361,6 +378,12 @@ public class InstructionManager : Singleton<InstructionManager>
     {
         var skip = pageNumber * pageSize;
         return AllFullFileNames.Skip(skip).Take(pageSize);
+    }
+
+    internal void OffsetChanged(Vector3 localPosition)
+    {
+        Instruction.OffsetForHolograms.AddNewOffset(localPosition);
+        Save();
     }
 
 

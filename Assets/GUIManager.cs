@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.MixedReality.Toolkit.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,14 +11,15 @@ public class GUIManager : MonoBehaviour
     public GameObject FootMenuPrefab;
     public GameObject InstructionMenuPrefab;
     public GameObject EnterNamePrefab;
-    public GameObject ContainerForSpawnedItems;
+    public GameObject ParentForInstructionHolograms;
     public StabilizedTracking StabilizedTracking;
-
+    public GameObject OffsetHandler;
 
     private GameObject _selectMenu;
     private GameObject _footMenu;
     private GameObject _instructionMenu;
     private GameObject _enterName;
+    private MenuMode _mode = MenuMode.Replay;
 
 
     public void Start()
@@ -30,9 +32,9 @@ public class GUIManager : MonoBehaviour
             throw new ArgumentException("Missing Prefab in GUIManager!");
         }
 
-        if (ContainerForSpawnedItems == null)
+        if (ParentForInstructionHolograms == null)
         {
-            ContainerForSpawnedItems = GameObject.Find("Container");
+            ParentForInstructionHolograms = GameObject.Find("Offset");
         }
 
         InstructionManager.Instance.ImportCompleted += OnCompleted;
@@ -41,10 +43,16 @@ public class GUIManager : MonoBehaviour
         _footMenu = Instantiate(FootMenuPrefab);
         _footMenu.GetComponent<FootMenuController>().HomeInteractable.OnClick.AddListener(FootMenu_OnHomeClick);
         _footMenu.GetComponent<FootMenuController>().MarkerScanInteractable.OnClick.AddListener(FootMenu_OnMarkerScanClick);
+        _footMenu.GetComponent<FootMenuController>().OffsetInteractable.OnClick.AddListener(FootMenu_OnOffsetClick);
 
         CreateSelectMenu();
         
 
+    }
+
+    private void FootMenu_OnOffsetClick()
+    {
+        OffsetHandler.SetActive(true);
     }
 
     private void OnCompleted(object sender, EventArgs e)
@@ -59,6 +67,14 @@ public class GUIManager : MonoBehaviour
         _selectMenu.GetComponent<SelectInstructionMenuController>().CreateNewInstructionInteractable.OnClick.AddListener(SelectInstructionMenu_OnCreateNewInstructionClick);
         _selectMenu.GetComponent<SelectInstructionMenuController>().ImportInstructionInteractable.OnClick.AddListener(SelectInstructionMenu_OnImportInstructionClick);
         _selectMenu.GetComponent<SelectInstructionMenuController>().InstructionSelected += SelectInstructionMenu_OnSelect;
+        _selectMenu.GetComponent<SelectInstructionMenuController>().ModeChanged += SelectInstructionMenu_ModeChanged;
+    }
+
+    private void SelectInstructionMenu_ModeChanged(object sender, ModeChangedEventArgs e)
+    {
+        _mode = e.Mode;
+
+        _footMenu.GetComponent<FootMenuController>().ChangeMode(_mode);
     }
 
     private void FootMenu_OnMarkerScanClick()
@@ -69,9 +85,17 @@ public class GUIManager : MonoBehaviour
 
     private void FootMenu_OnHomeClick()
     {
+        Reset();
+    }
+
+    private void Reset()
+    {
         InstructionManager.Instance.Reset();
         Destroy(_enterName);
-        Destroy(_instructionMenu);
+        if (_instructionMenu != null)
+        {
+            Destroy(_instructionMenu);
+        }
         DestroyAllSpawnedItems();
         DestroySelectMenu();
         CreateSelectMenu();
@@ -79,9 +103,9 @@ public class GUIManager : MonoBehaviour
 
     private void DestroyAllSpawnedItems()
     {
-        while (ContainerForSpawnedItems.transform.childCount > 0)
+        while (ParentForInstructionHolograms.transform.childCount > 0)
         {
-            DestroyImmediate(ContainerForSpawnedItems.transform.GetChild(0).gameObject);
+            DestroyImmediate(ParentForInstructionHolograms.transform.GetChild(0).gameObject);
         }
     }
 
@@ -111,9 +135,9 @@ public class GUIManager : MonoBehaviour
     private void SelectInstructionMenu_OnSelect(object sender, InstructionSelectionEventArgs e)
     {
         ShowInstructionMenu(_selectMenu.GetComponent<SelectInstructionMenuController>().Mode);
-
+        ParentForInstructionHolograms.GetComponent<OffsetController>().SetTransform(InstructionManager.Instance.Instruction.OffsetForHolograms);
+        
         DestroySelectMenu();
-
     }
 
     private void ShowInstructionMenu(MenuMode mode)
@@ -123,11 +147,29 @@ public class GUIManager : MonoBehaviour
 
         if (mode == MenuMode.Replay)
         {
-            _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Replay, ContainerForSpawnedItems);
+            var menuController = _instructionMenu.GetComponent<MenuController>();
+            if (menuController != null)
+            {
+                menuController.Init(MenuMode.Replay, ParentForInstructionHolograms);
+            }
+            else
+            {
+                Debug.Log("menuController is null");
+            }
+
+            var mainPanelController = _instructionMenu.GetComponentInChildren<MainPanelController>();
+            if (mainPanelController != null)
+            {
+                mainPanelController.HomeButtonClicked.AddListener(Reset);
+            }
+            else
+            {
+                Debug.Log("mainPanelController is null");
+            }
         }
         else
         {
-            _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Record, ContainerForSpawnedItems);
+            _instructionMenu.GetComponent<MenuController>().Init(MenuMode.Record, ParentForInstructionHolograms);
         }
     }
 
