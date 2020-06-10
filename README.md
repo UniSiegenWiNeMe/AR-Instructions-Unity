@@ -35,11 +35,12 @@ Selection menu, left normal mode, right editor mode
 <img src="Documentation/selectionMenu1.jpg" width="400">  <img src="Documentation/selectionMenu2.jpg" width="400">
 
 
-Selecting different colors
+Selecting different colors  
 <img src="Documentation/different colors.gif" height="400" />
 
-Placing an object in space
+Placing an object in space  
 <img src="Documentation/placing hologram in space.gif" height="400" />
+
 
 
 
