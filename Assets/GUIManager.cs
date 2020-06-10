@@ -94,7 +94,6 @@ public class GUIManager : MonoBehaviour
         Destroy(_enterName);
         if (_instructionMenu != null)
         {
-            _instructionMenu.GetComponentInChildren<MainPanelController>().HomeButton.GetComponent<Interactable>().OnClick.RemoveAllListeners();
             Destroy(_instructionMenu);
         }
         DestroyAllSpawnedItems();
@@ -161,11 +160,7 @@ public class GUIManager : MonoBehaviour
             var mainPanelController = _instructionMenu.GetComponentInChildren<MainPanelController>();
             if (mainPanelController != null)
             {
-                var interactable = mainPanelController.HomeButton.GetComponent<Interactable>();
-                if (interactable != null)
-                {
-                    interactable.OnClick.AddListener(Reset);
-                }
+                mainPanelController.HomeButtonClicked.AddListener(Reset);
             }
             else
             {

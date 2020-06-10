@@ -729,31 +729,121 @@ PrefabInstance:
       propertyPath: HostCollider
       value: 
       objectReference: {fileID: 7406061572466873145}
+    - target: {fileID: 2187416214413964463, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2187416214413964465, guid: cdf002702c5b71d47b6c97be3a79e130,
         type: 3}
       propertyPath: parent
       value: 
       objectReference: {fileID: 7406061572466873144}
+    - target: {fileID: 2187416214413964469, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416214413964470, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416214413964470, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416214413964470, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416214413964470, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2187416215766993190, guid: cdf002702c5b71d47b6c97be3a79e130,
         type: 3}
       propertyPath: HostCollider
       value: 
       objectReference: {fileID: 7406061572466873145}
+    - target: {fileID: 2187416215766993190, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2187416215766993192, guid: cdf002702c5b71d47b6c97be3a79e130,
         type: 3}
       propertyPath: parent
       value: 
       objectReference: {fileID: 7406061572466873144}
+    - target: {fileID: 2187416215766993196, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416215766993198, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416215766993198, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416215766993198, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416215766993198, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2187416215814015731, guid: cdf002702c5b71d47b6c97be3a79e130,
         type: 3}
       propertyPath: HostCollider
       value: 
       objectReference: {fileID: 7406061572466873145}
+    - target: {fileID: 2187416215814015731, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2187416215814015733, guid: cdf002702c5b71d47b6c97be3a79e130,
         type: 3}
       propertyPath: parent
       value: 
       objectReference: {fileID: 7406061572466873144}
+    - target: {fileID: 2187416215814015737, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416215814015739, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416215814015739, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusExitEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416215814015739, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2187416215814015739, guid: cdf002702c5b71d47b6c97be3a79e130,
+        type: 3}
+      propertyPath: onFocusEnterEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2187416215766993199, guid: cdf002702c5b71d47b6c97be3a79e130, type: 3}
     - {fileID: 2187416215814015732, guid: cdf002702c5b71d47b6c97be3a79e130, type: 3}

@@ -13,6 +13,9 @@
         "packagesPath": "C:\\Users\\FlorianJasche\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\FlorianJasche\\Documents\\GitHub\\AR-Instructions-Unity\\Assets\\MRTK\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\.obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
           "C:\\Users\\FlorianJasche\\Documents\\GitHub\\AR-Instructions-Unity\\Assets\\NuGet.Config",
           "C:\\Users\\FlorianJasche\\AppData\\Roaming\\NuGet\\NuGet.Config",

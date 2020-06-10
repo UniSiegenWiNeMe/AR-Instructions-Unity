@@ -47,12 +47,16 @@ public class MainPanelController : MonoBehaviour
 
     public GameObject InsertTextButton;
     public GameObject ExportButton;
+    
+    [SerializeField]
+    private GameObject HomeButton;
 
-    public GameObject HomeButton;
     /// <summary>
     /// this event is triggerd every time some data of the instruction has changed
     /// </summary>
     public UnityEvent OnNewData;
+
+    public UnityEvent HomeButtonClicked;
 
     /// <summary>
     /// Mode of the menu
@@ -60,6 +64,15 @@ public class MainPanelController : MonoBehaviour
     private MenuMode _mode;
     private InstructionManager _instructionManager;
 
+
+    public void Start()
+    {
+        HomeButton.GetComponent<Interactable>().OnClick.AddListener(() => HomeButtonClicked?.Invoke());
+    }
+    public void OnDestroy()
+    {
+        HomeButton.GetComponent<Interactable>().OnClick.RemoveAllListeners();
+    }
     public void Init(MenuMode mode, GameObject ContainerForSpawnedItems)
     {
         _mode = mode;
