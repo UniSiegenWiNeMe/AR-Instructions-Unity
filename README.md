@@ -39,7 +39,7 @@ Selecting different colors
 <img src="Documentation/different colors.gif" height="400" />
 
 Placing an object in space  
-<img src="Documentation/placing hologram in space.gif" height="400" />
+<img src="Documentation/FixedMovementHandler.gif" height="400" />
 
 
 
