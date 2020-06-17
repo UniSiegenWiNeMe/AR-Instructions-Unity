@@ -157,7 +157,7 @@ public class GUIManager : MonoBehaviour
                 Debug.Log("menuController is null");
             }
 
-            var mainPanelController = _instructionMenu.GetComponentInChildren<MainPanelController>();
+            var mainPanelController = _instructionMenu.gameObject.GetComponentInChildren<MainPanelController>(true);
             if (mainPanelController != null)
             {
                 mainPanelController.HomeButtonClicked.AddListener(Reset);

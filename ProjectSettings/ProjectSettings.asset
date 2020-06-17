@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: AR-Instructions-Unity
+  productName: AR-Instructions-UserTest
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -527,14 +527,14 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: AR-Instructions-Unity
+  metroPackageName: AR-Instructions-UserTest
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: Mittelstand40KompetenzzentrumSiegen
   metroCertificateIssuer: Mittelstand40KompetenzzentrumSiegen
   metroCertificateNotAfter: 80230efcaabad601
-  metroApplicationDescription: AR-Instructions-Unity
+  metroApplicationDescription: AR-Instructions-UserTest
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0

@@ -67,7 +67,7 @@ public class MainPanelController : MonoBehaviour
 
     public void Start()
     {
-        HomeButton.GetComponent<Interactable>().OnClick.AddListener(() => HomeButtonClicked?.Invoke());
+        //HomeButton.GetComponent<Interactable>().OnClick.AddListener(() => HomeButtonClicked?.Invoke());
     }
     public void OnDestroy()
     {
@@ -116,6 +116,8 @@ public class MainPanelController : MonoBehaviour
             }
         }
         PreviousStepButton.SetActive(false);
+
+        HomeButton.GetComponent<Interactable>().OnClick.AddListener(() => HomeButtonClicked?.Invoke());
     }
 
     //public void Init(MenuMode mode, GameObject ContainerForSpawnedItems, string InstructionName = null)
