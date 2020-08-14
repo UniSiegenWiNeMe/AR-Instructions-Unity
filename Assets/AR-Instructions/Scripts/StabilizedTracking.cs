@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Vuforia;
 
-public class StabilizedTracking : MonoBehaviour, ITrackableEventHandler
+public class StabilizedTracking : DefaultTrackableEventHandler
 {
     /// <summary>
     /// Number of Frames to capure the marker
@@ -40,16 +40,16 @@ public class StabilizedTracking : MonoBehaviour, ITrackableEventHandler
     protected virtual void Start()
     {
         TrackableBehaviour = GetComponent<TrackableBehaviour>();
-        if (TrackableBehaviour)
-            TrackableBehaviour.RegisterTrackableEventHandler(this);
+        //if (TrackableBehaviour)
+        //    TrackableBehaviour.RegisterTrackableEventHandler(this);
 
         _rawTransformations = new List<Transform>();
     }
 
     protected virtual void OnDestroy()
     {
-        if (TrackableBehaviour)
-            TrackableBehaviour.UnregisterTrackableEventHandler(this);
+        //if (TrackableBehaviour)
+        //    TrackableBehaviour.UnregisterTrackableEventHandler(this);
     }
 
 
@@ -154,17 +154,7 @@ public class StabilizedTracking : MonoBehaviour, ITrackableEventHandler
 
         
     }
-
-    protected virtual void OnTrackingFound()
-    {
         
-    }
-
-
-    protected virtual void OnTrackingLost()
-    {
-        
-    }
 
 }
 
