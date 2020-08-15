@@ -40,16 +40,17 @@ public class StabilizedTracking : DefaultTrackableEventHandler
     protected virtual void Start()
     {
         TrackableBehaviour = GetComponent<TrackableBehaviour>();
-        //if (TrackableBehaviour)
-        //    TrackableBehaviour.RegisterTrackableEventHandler(this);
+        if (TrackableBehaviour)
+            TrackableBehaviour.RegisterOnTrackableStatusChanged(OnTrackableStateChanged);
 
         _rawTransformations = new List<Transform>();
     }
 
+    
     protected virtual void OnDestroy()
     {
-        //if (TrackableBehaviour)
-        //    TrackableBehaviour.UnregisterTrackableEventHandler(this);
+        if (TrackableBehaviour)
+            TrackableBehaviour.UnregisterOnTrackableStatusChanged(OnTrackableStateChanged);
     }
 
 
@@ -57,22 +58,22 @@ public class StabilizedTracking : DefaultTrackableEventHandler
     ///     Implementation of the ITrackableEventHandler function called when the
     ///     tracking state changes.
     /// </summary>
-    public void OnTrackableStateChanged( TrackableBehaviour.Status previousStatus, TrackableBehaviour.Status newStatus)
+    public void OnTrackableStateChanged(TrackableBehaviour.StatusChangeResult obj)
     {
-        PreviousStatus = previousStatus;
-        NewStatus = newStatus;
+        PreviousStatus = obj.PreviousStatus;
+        NewStatus = obj.NewStatus;
 
         Debug.Log("Trackable " + TrackableBehaviour.TrackableName +
                   " " + TrackableBehaviour.CurrentStatus);
 
-        if (newStatus == TrackableBehaviour.Status.DETECTED ||
-            newStatus == TrackableBehaviour.Status.TRACKED ||
-            newStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
+        if (NewStatus == TrackableBehaviour.Status.DETECTED ||
+            NewStatus == TrackableBehaviour.Status.TRACKED ||
+            NewStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
         {
             OnTrackingFound();
         }
-        else if (previousStatus == TrackableBehaviour.Status.TRACKED &&
-                 newStatus == TrackableBehaviour.Status.NO_POSE)
+        else if (PreviousStatus == TrackableBehaviour.Status.TRACKED &&
+                 NewStatus == TrackableBehaviour.Status.NO_POSE)
         {
             OnTrackingLost();
         }

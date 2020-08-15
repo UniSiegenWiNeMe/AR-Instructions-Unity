@@ -72,7 +72,7 @@ MonoBehaviour:
   rotateLerpTime: 0.1
   scaleLerpTime: 0
   maintainScale: 1
-  smoothing: 1
+  smoothing: 0
   lifetime: 0
   referenceDirection: 2
   minDistance: 1
@@ -186,7 +186,7 @@ MonoBehaviour:
   rotateLerpTime: 0.1
   scaleLerpTime: 0
   maintainScale: 1
-  smoothing: 1
+  smoothing: 0
   lifetime: 0
   referenceDirection: 2
   minDistance: 1
@@ -353,6 +353,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -364,6 +365,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -443,6 +445,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -454,6 +457,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -497,6 +501,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -640,6 +645,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -651,6 +657,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -739,6 +746,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -750,6 +758,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1002,6 +1011,11 @@ PrefabInstance:
     - target: {fileID: 1767914957067471992, guid: f741888b7a5201f4bb26bf81a07943f9,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1767914957067471993, guid: f741888b7a5201f4bb26bf81a07943f9,
+        type: 3}
+      propertyPath: smoothing
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1767914957067471995, guid: f741888b7a5201f4bb26bf81a07943f9,
@@ -2546,6 +2560,11 @@ PrefabInstance:
       propertyPath: Events.Array.data[1].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8550163319508588056, guid: 9e93e52e607413842be664778558fcad,
+        type: 3}
+      propertyPath: smoothing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8550163319508588057, guid: 9e93e52e607413842be664778558fcad,
         type: 3}
       propertyPath: m_Name
@@ -3318,6 +3337,11 @@ PrefabInstance:
     - target: {fileID: 8485527980459789296, guid: a6acc8dade8f448468886e50b3248368,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8485527980459789298, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: smoothing
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8485527980459789299, guid: a6acc8dade8f448468886e50b3248368,

@@ -8,7 +8,7 @@ using UnityEngine;
 [InitializeOnLoad]
 public class AddVuforiaEnginePackage
 {
-    const string VUFORIA_VERSION = "9.0.12";
+    const string VUFORIA_VERSION = "9.3.3";
     const string PACKAGE_KEY = "\"com.ptc.vuforia.engine\"";
 
     static readonly string sPackagesPath = Path.Combine(Application.dataPath, "..", "Packages");
