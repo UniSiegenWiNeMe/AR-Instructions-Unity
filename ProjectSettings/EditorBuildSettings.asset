@@ -8,4 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/AR-Instructions/Scenes/Main.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  m_configObjects: {}
+  m_configObjects:
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: a542d8b2dbf7e194592b7fcc76850296,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 75d6f34515037f8409f4e931fb9d161d,
+      type: 2}

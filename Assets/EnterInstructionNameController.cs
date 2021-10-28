@@ -34,13 +34,10 @@ public class EnterInstructionNameController : MonoBehaviour
         if (keyboard != null)
         {
             keyboardText = keyboard.text;
-            if (TouchScreenKeyboard.visible)
+            OutputTextMesh.text = "Name: " + keyboardText;
+            
+            if(keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
             {
-                OutputTextMesh.text = "Name: " + keyboardText;
-            }
-            else
-            {
-                OutputTextMesh.text = "Name: " + keyboardText;
                 _continueButton.IsEnabled = true;
                 keyboard = null;
             }

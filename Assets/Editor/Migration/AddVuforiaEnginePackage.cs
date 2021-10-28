@@ -1,19 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
 [InitializeOnLoad]
 public class AddVuforiaEnginePackage
 {
-    const string VUFORIA_VERSION = "9.3.3";
-    const string PACKAGE_KEY = "\"com.ptc.vuforia.engine\"";
-
     static readonly string sPackagesPath = Path.Combine(Application.dataPath, "..", "Packages");
     static readonly string sManifestJsonPath = Path.Combine(sPackagesPath, "manifest.json");
-
+    const string VUFORIA_VERSION = "10.2.5";
+    const string VUFORIA_TAR_FILE_DIR = "Assets/Editor/Migration/";
+    const string PACKAGES_RELATIVE_PATH = "Packages";
 
     static readonly ScopedRegistry sVuforiaRegistry = new ScopedRegistry()
     {
@@ -22,70 +23,175 @@ public class AddVuforiaEnginePackage
         scopes = new[] { "com.ptc.vuforia" }
     };
 
-
     static AddVuforiaEnginePackage()
     {
         if (Application.isBatchMode)
             return;
-
+        
         var manifest = Manifest.JsonDeserialize(sManifestJsonPath);
-        var registries = manifest.ScopedRegistries.ToList();
-        if (registries.Any(r => r == sVuforiaRegistry))
-            return;
 
-        if (EditorUtility.DisplayDialog("Add Vuforia Engine Package",
-            "Would you like to update your project to always be able to find the latest version of the Vuforia Engine in the package manager window?\n" +
-            $"If a Vuforia Engine package is already present in your project it will be upgraded to version {VUFORIA_VERSION}", "Update", "Cancel"))
-        {
-            UpdateManifest(manifest);
-        }
+        var packages = GetPackageDescriptions();
+            
+        if (!packages.All(p => IsVuforiaUpToDate(manifest, p.BundleId)))
+            DisplayAddPackageDialogue(manifest, packages);
+    }
+    
+    static bool IsVuforiaUpToDate(Manifest manifest, string bundleId)
+    {
+        var dependencies = manifest.Dependencies.Split(',').ToList();
+        var upToDate = false;
+
+        if(dependencies.Any(d => d.Contains(bundleId) && d.Contains("file:")))
+            upToDate = IsUsingRightFileVersion(manifest, bundleId);
+
+        return upToDate;
+    }
+    
+    static bool IsUsingRightFileVersion(Manifest manifest, string bundleId)
+    {
+        var dependencies = manifest.Dependencies.Split(',').ToList();
+        return dependencies.Any(d => d.Contains(bundleId) && d.Contains("file:") && VersionNumberIsTheLatestTarball(d));
     }
 
-    static void UpdateManifest(Manifest manifest)
+    static bool VersionNumberIsTheLatestTarball(string package)
     {
-        AddRegistry(manifest, sVuforiaRegistry);
-        SetVuforiaVersion(manifest);
+        var version = package.Split('-');
+        if (version.Length >= 2)
+        {
+            version[1] = version[1].TrimEnd(".tgz\"".ToCharArray());
+            return IsCurrentVersionHigher(version[1]);
+        }
+
+        return false;
+    }
+
+    static bool IsCurrentVersionHigher(string currentVersionString)
+    {
+        if (string.IsNullOrEmpty(currentVersionString) || string.IsNullOrEmpty(VUFORIA_VERSION))
+            return false;
+
+        var currentVersion = TryConvertStringToVersion(currentVersionString);
+        var updatingVersion = TryConvertStringToVersion(VUFORIA_VERSION);
+        
+        if (currentVersion >= updatingVersion)
+            return true;
+
+        return false;
+    }
+
+    static Version TryConvertStringToVersion(string versionString)
+    {
+        Version res;
+        try
+        {
+            res = new Version(versionString);
+        }
+        catch (Exception)
+        {
+            return new Version();
+        }
+
+        return new Version(res.Major, res.Minor, res.Build);
+    }
+
+    static void DisplayAddPackageDialogue(Manifest manifest, IEnumerable<PackageDescription> packages)
+    {
+        if (EditorUtility.DisplayDialog("Add Vuforia Engine Package",
+            $"Would you like to update your project to include the Vuforia Engine {VUFORIA_VERSION} package from the unitypackage?\n" +
+            $"If an older Vuforia Engine package is already present in your project it will be upgraded to version {VUFORIA_VERSION}\n\n",
+            "Update", "Cancel"))
+        {
+            foreach (var package in packages)
+            {
+                MovePackageFile(package.FileName);
+                UpdateManifest(manifest, package.BundleId, package.FileName);
+            }
+        }
+    }
+    
+    static List<PackageDescription> GetPackageDescriptions()
+    {
+        var tarFilePaths = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), VUFORIA_TAR_FILE_DIR)).Where(f => f.EndsWith(".tgz"));
+
+        // Define a regular expression for repeated words.
+        var rx = new Regex(@"(([a-z]+)(\.[a-z]+)*)\-((\d+)\.(\d+)\.(\d+))", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        var packageDescriptions = new List<PackageDescription>();
+
+        foreach (var filePath in tarFilePaths)
+        {
+            var fileName = Path.GetFileName(filePath);
+            // Find matches.
+            var matches = rx.Matches(fileName);
+
+            // Report on each match.
+            foreach (Match match in matches)
+            {
+                var groups = match.Groups;
+                var bundleId = groups[1].Value;
+                var versionString = groups[4].Value;
+
+                if (string.Equals(versionString, VUFORIA_VERSION))
+                {
+                    packageDescriptions.Add(new PackageDescription()
+                    {
+                        BundleId = bundleId,
+                        FileName = fileName
+                    });
+                }
+            }
+        }
+
+        return packageDescriptions;
+    }
+    
+    static void MovePackageFile(string fileName)
+    {
+        var sourceFile = Path.Combine(Directory.GetCurrentDirectory(), VUFORIA_TAR_FILE_DIR, fileName);
+        var destFile = Path.Combine(Directory.GetCurrentDirectory(), PACKAGES_RELATIVE_PATH, fileName);
+        File.Copy(sourceFile, destFile, true);
+        File.Delete(sourceFile);
+        File.Delete(sourceFile + ".meta");
+    }
+
+    static void UpdateManifest(Manifest manifest, string bundleId, string fileName)
+    {
+        //remove existing, outdated NPM scoped registry if present
+        var registries = manifest.ScopedRegistries.ToList();
+        if (registries.Contains(sVuforiaRegistry))
+        {
+            registries.Remove(sVuforiaRegistry);
+            manifest.ScopedRegistries = registries.ToArray();
+        }
+
+        //add specified vuforia version via Git URL
+        SetVuforiaVersion(manifest, bundleId, fileName);
 
         manifest.JsonSerialize(sManifestJsonPath);
-        
+
         AssetDatabase.Refresh();
     }
 
-    static void SetVuforiaVersion(Manifest manifest)
+    static void SetVuforiaVersion(Manifest manifest, string bundleId, string fileName)
     {
         var dependencies = manifest.Dependencies.Split(',').ToList();
 
+        var versionEntry = $"\"file:{fileName}\"";
         var versionSet = false;
-        for(var i = 0; i < dependencies.Count; i++)
+        for (var i = 0; i < dependencies.Count; i++)
         {
-            if(!dependencies[i].Contains(PACKAGE_KEY))
+            if (!dependencies[i].Contains(bundleId))
                 continue;
 
             var kvp = dependencies[i].Split(':');
-
-            kvp[1] = $"\"{VUFORIA_VERSION}\""; //version string of the package
-
-            dependencies[i] = string.Join(":", kvp);
-
+            dependencies[i] = kvp[0] + ": " + versionEntry;
             versionSet = true;
         }
 
         if (!versionSet)
-            dependencies.Insert(0, $"\n    {PACKAGE_KEY}: \"{VUFORIA_VERSION}\"");
-        
+            dependencies.Insert(0, $"\n    \"{bundleId}\": {versionEntry}");
 
         manifest.Dependencies = string.Join(",", dependencies);
-    }
-
-    static void AddRegistry(Manifest manifest, ScopedRegistry scopedRegistry)
-    {
-        var registries = manifest.ScopedRegistries.ToList();
-        if (registries.Any(r => r == scopedRegistry))
-            return;
-
-        registries.Add(scopedRegistry);
-
-        manifest.ScopedRegistries = registries.ToArray();
     }
 
     class Manifest
@@ -98,9 +204,7 @@ public class AddVuforiaEnginePackage
 
         public void JsonSerialize(string path)
         {
-            var jsonString = JsonUtility.ToJson(
-                new UnitySerializableManifest {scopedRegistries = ScopedRegistries, dependencies = new DependencyPlaceholder()},
-                true);
+            var jsonString = GetJsonString();
 
             var startIndex = GetDependenciesStart(jsonString);
             var endIndex = GetDependenciesEnd(jsonString, startIndex);
@@ -113,6 +217,19 @@ public class AddVuforiaEnginePackage
 
             File.WriteAllText(path, stringBuilder.ToString());
         }
+
+        string GetJsonString()
+        {
+            if (ScopedRegistries.Length > 0)
+                return JsonUtility.ToJson(
+                    new UnitySerializableManifest { scopedRegistries = ScopedRegistries, dependencies = new DependencyPlaceholder() },
+                    true);
+
+            return JsonUtility.ToJson(
+                new UnitySerializableManifestDependenciesOnly() { dependencies = new DependencyPlaceholder() },
+                true);
+        }
+
 
         public static Manifest JsonDeserialize(string path)
         {
@@ -158,6 +275,11 @@ public class AddVuforiaEnginePackage
         }
     }
 
+    class UnitySerializableManifestDependenciesOnly
+    {
+        public DependencyPlaceholder dependencies;
+    }
+
     class UnitySerializableManifest
     {
         public ScopedRegistry[] scopedRegistries;
@@ -176,7 +298,7 @@ public class AddVuforiaEnginePackage
             if (!(obj is ScopedRegistry))
                 return false;
 
-            var other = (ScopedRegistry) obj;
+            var other = (ScopedRegistry)obj;
 
             return name == other.name &&
                    url == other.url &&
@@ -209,4 +331,10 @@ public class AddVuforiaEnginePackage
 
     [Serializable]
     struct DependencyPlaceholder { }
+    
+    struct PackageDescription
+    {
+        public string BundleId;
+        public string FileName;
+    }
 }

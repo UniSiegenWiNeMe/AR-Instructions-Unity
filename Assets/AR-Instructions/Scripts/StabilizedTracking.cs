@@ -2,14 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Vuforia;
 
-public class StabilizedTracking : DefaultTrackableEventHandler
+
+public class StabilizedTracking : DefaultObserverEventHandler
 {
     /// <summary>
     /// Number of Frames to capure the marker
     /// </summary>
     public int TargetCount = 100;
+    private Transform mCentralAnchorPointTransform;
+    private List<Transform> _rawTransformations;
+    private bool _transformSet = false;
+    private Status currentState;
 
     public bool IsMarkerScanned
     {
@@ -30,62 +36,24 @@ public class StabilizedTracking : DefaultTrackableEventHandler
     public event EventHandler<MarkerScannedEventArgs> MarkerScanned;
     public event EventHandler MarkerReset;
 
-    protected TrackableBehaviour TrackableBehaviour;
-    protected TrackableBehaviour.Status PreviousStatus;
-    protected TrackableBehaviour.Status NewStatus;
 
-    private List<Transform> _rawTransformations;
-    private bool _transformSet = false;
-
-    protected virtual void Start()
+    protected override void Start()
     {
-        TrackableBehaviour = GetComponent<TrackableBehaviour>();
-        if (TrackableBehaviour)
-            TrackableBehaviour.RegisterOnTrackableStatusChanged(OnTrackableStateChanged);
+        base.Start();
 
+        IsMarkerScanned = false;
+        MarkerPosition = new Vector3();
+        MarkerRotation = new Quaternion();
         _rawTransformations = new List<Transform>();
+        _transformSet = false;
+
+        VuforiaApplication.Instance.OnVuforiaStarted += OnVuforiaStarted;
     }
 
-    
-    protected virtual void OnDestroy()
+    void OnVuforiaStarted()
     {
-        if (TrackableBehaviour)
-            TrackableBehaviour.UnregisterOnTrackableStatusChanged(OnTrackableStateChanged);
+        mCentralAnchorPointTransform = VuforiaBehaviour.Instance.transform;
     }
-
-
-    /// <summary>
-    ///     Implementation of the ITrackableEventHandler function called when the
-    ///     tracking state changes.
-    /// </summary>
-    public void OnTrackableStateChanged(TrackableBehaviour.StatusChangeResult obj)
-    {
-        PreviousStatus = obj.PreviousStatus;
-        NewStatus = obj.NewStatus;
-
-        Debug.Log("Trackable " + TrackableBehaviour.TrackableName +
-                  " " + TrackableBehaviour.CurrentStatus);
-
-        if (NewStatus == TrackableBehaviour.Status.DETECTED ||
-            NewStatus == TrackableBehaviour.Status.TRACKED ||
-            NewStatus == TrackableBehaviour.Status.EXTENDED_TRACKED)
-        {
-            OnTrackingFound();
-        }
-        else if (PreviousStatus == TrackableBehaviour.Status.TRACKED &&
-                 NewStatus == TrackableBehaviour.Status.NO_POSE)
-        {
-            OnTrackingLost();
-        }
-        else
-        {
-            // For combo of previousStatus=UNKNOWN + newStatus=UNKNOWN|NOT_FOUND
-            // Vuforia is starting, but tracking has not been lost or found yet
-            // Call OnTrackingLost() to hide the augmentations
-            OnTrackingLost();
-        }
-    }
-
     internal void Reset()
     {
         IsMarkerScanned = false;
@@ -96,12 +64,18 @@ public class StabilizedTracking : DefaultTrackableEventHandler
 
         VuforiaBehaviour.Instance.enabled = true;
 
-        MarkerReset?.Invoke(this, null);
+        MarkerReset?.Invoke(this,null);
+    }
+
+
+    protected override void HandleTargetStatusChanged(Status previousStatus, Status newStatus)
+    {
+        currentState = newStatus;
     }
 
     public void Update()
     {
-        if(NewStatus == TrackableBehaviour.Status.TRACKED && _rawTransformations.Count <= TargetCount)
+        if (currentState == Status.TRACKED && _rawTransformations.Count <= TargetCount)
         {
             _rawTransformations.Add(this.transform);
 
@@ -153,13 +127,12 @@ public class StabilizedTracking : DefaultTrackableEventHandler
 
         MarkerScanned?.Invoke(this, new MarkerScannedEventArgs(position, rotation));
 
-        
-    }
-        
 
+    }
 }
 
-public class MarkerScannedEventArgs:EventArgs
+
+public class MarkerScannedEventArgs : EventArgs
 {
     public Vector3 Position;
     public Quaternion Rotation;
