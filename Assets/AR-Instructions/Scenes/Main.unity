@@ -668,7 +668,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SelectMenuPrefab: {fileID: 1403640373004426742, guid: 6f2ae659b4710cc4980fe87ea9f0eec0,
     type: 3}
-  FootMenuPrefab: {fileID: 2050132572202732462, guid: 8393ff675d5d1634fbfc2082e3c13b66,
+  HandMenuPrefab: {fileID: 3015718057418754561, guid: 9555e5cb64eedde45805d5b93f5e3b49,
     type: 3}
   InstructionMenuPrefab: {fileID: 1642128205128728458, guid: 8c413a61b08edfe4d85cb052eecf42ba,
     type: 3}
@@ -1229,6 +1229,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1108153040}
   m_CullTransparentMesh: 0
+--- !u!21 &1160381282
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 'MiniWizardVumark20x20Material
+
+    27078'
+  m_Shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: cea7c5c2c6afd13d077a6b6b3526f4de, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors:
+    - _Color: {r: 0.82089555, g: 0.82089555, b: 0.82089555, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1185366891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1756,35 +1785,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &1354403876
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 'MiniWizardVumark20x20Material
-
-    50634'
-  m_Shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: cea7c5c2c6afd13d077a6b6b3526f4de, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors:
-    - _Color: {r: 0.82089555, g: 0.82089555, b: 0.82089555, a: 1}
-  m_BuildTextureStacks: []
 --- !u!1 &1369947299
 GameObject:
   m_ObjectHideFlags: 0
@@ -2005,7 +2005,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1354403876}
+  - {fileID: 1160381282}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

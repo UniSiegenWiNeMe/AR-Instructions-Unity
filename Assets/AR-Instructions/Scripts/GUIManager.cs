@@ -8,7 +8,7 @@ public class GUIManager : MonoBehaviour
 {
 
     public GameObject SelectMenuPrefab;
-    public GameObject FootMenuPrefab;
+    public GameObject HandMenuPrefab;
     public GameObject InstructionMenuPrefab;
     public GameObject EnterNamePrefab;
     public GameObject ParentForInstructionHolograms;
@@ -16,7 +16,7 @@ public class GUIManager : MonoBehaviour
     public GameObject OffsetHandler;
 
     private GameObject _selectMenu;
-    private GameObject _footMenu;
+    private GameObject _handMenu;
     private GameObject _instructionMenu;
     private GameObject _enterName;
     private MenuMode _mode = MenuMode.Replay;
@@ -25,7 +25,7 @@ public class GUIManager : MonoBehaviour
     public void Start()
     {
         if(SelectMenuPrefab == null ||
-            FootMenuPrefab == null ||
+            HandMenuPrefab == null ||
             InstructionMenuPrefab == null ||
             EnterNamePrefab == null)
         {
@@ -40,17 +40,17 @@ public class GUIManager : MonoBehaviour
         InstructionManager.Instance.ImportCompleted += OnCompleted;
 
 
-        _footMenu = Instantiate(FootMenuPrefab);
-        _footMenu.GetComponent<FootMenuController>().HomeInteractable.OnClick.AddListener(FootMenu_OnHomeClick);
-        _footMenu.GetComponent<FootMenuController>().MarkerScanInteractable.OnClick.AddListener(FootMenu_OnMarkerScanClick);
-        _footMenu.GetComponent<FootMenuController>().OffsetInteractable.OnClick.AddListener(FootMenu_OnOffsetClick);
+        _handMenu = Instantiate(HandMenuPrefab);
+        _handMenu.GetComponent<HandMenuController>().HomeInteractable.OnClick.AddListener(HandMenu_OnHomeClick);
+        _handMenu.GetComponent<HandMenuController>().MarkerScanInteractable.OnClick.AddListener(HandMenu_OnMarkerScanClick);
+        _handMenu.GetComponent<HandMenuController>().OffsetInteractable.OnClick.AddListener(HandMenu_OnOffsetClick);
 
         CreateSelectMenu();
         
 
     }
 
-    private void FootMenu_OnOffsetClick()
+    private void HandMenu_OnOffsetClick()
     {
         OffsetHandler.SetActive(true);
     }
@@ -74,16 +74,16 @@ public class GUIManager : MonoBehaviour
     {
         _mode = e.Mode;
 
-        _footMenu.GetComponent<FootMenuController>().ChangeMode(_mode);
+        _handMenu.GetComponent<HandMenuController>().ChangeMode(_mode);
     }
 
-    private void FootMenu_OnMarkerScanClick()
+    private void HandMenu_OnMarkerScanClick()
     {
         StabilizedTracking.Reset();
 
     }
 
-    private void FootMenu_OnHomeClick()
+    private void HandMenu_OnHomeClick()
     {
         Reset();
     }
