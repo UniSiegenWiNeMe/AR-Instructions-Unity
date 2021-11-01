@@ -2980,7 +2980,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2070291446501122020}
+      objectReference: {fileID: 0}
     - target: {fileID: 2066368050349682635, guid: a6acc8dade8f448468886e50b3248368,
         type: 3}
       propertyPath: Events.Array.data[1].Event.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -3035,7 +3035,7 @@ PrefabInstance:
         type: 3}
       propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 2070291446501122020}
+      objectReference: {fileID: 0}
     - target: {fileID: 2066368050349682635, guid: a6acc8dade8f448468886e50b3248368,
         type: 3}
       propertyPath: Events.Array.data[1].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
@@ -3101,6 +3101,16 @@ PrefabInstance:
       propertyPath: iconQuadTexture
       value: 
       objectReference: {fileID: 2800000, guid: 32290bcb1f13c0a469e0486086efd702, type: 3}
+    - target: {fileID: 2276573459157752781, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2276573459778275907, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: m_Name
+      value: Fix
+      objectReference: {fileID: 0}
     - target: {fileID: 2447992423071137875, guid: a6acc8dade8f448468886e50b3248368,
         type: 3}
       propertyPath: Events.Array.data[1].Event.m_PersistentCalls.m_Calls.Array.size
@@ -3336,10 +3346,186 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].ClassName
+      value: InteractableOnToggleReceiver
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].AssemblyQualifiedName
+      value: Microsoft.MixedReality.Toolkit.UI.InteractableOnToggleReceiver, Microsoft.MixedReality.Toolkit.SDK,
+        Version=2.7.2.0, Culture=neutral, PublicKeyToken=null
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].Name
+      value: OnDeselect
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].Type
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].Name
+      value: InteractionFilter
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].Type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].Label
+      value: On Deselect
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].Label
+      value: Interaction Filter
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].Tooltip
+      value: The toggle is deselected
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].Tooltip
+      value: Specify whether press event is for near or far interaction
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].IntValue
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].Options.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].Options.Array.data[0]
+      value: Near and Far
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].Options.Array.data[1]
+      value: Near Only
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[1].Options.Array.data[2]
+      value: Far Only
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1642128205128728456}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Behaviour, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1642128205128728456}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: set_enabled
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Event.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.Behaviour, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8708567441416529120, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: Events.Array.data[2].Settings.Array.data[0].EventValue.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8930143582871556326, guid: a6acc8dade8f448468886e50b3248368,
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8930143583492604264, guid: a6acc8dade8f448468886e50b3248368,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6acc8dade8f448468886e50b3248368, type: 3}
@@ -3355,15 +3541,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7311686228579526430}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2070291446501122020 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8773985110797302010, guid: a6acc8dade8f448468886e50b3248368,
-    type: 3}
-  m_PrefabInstance: {fileID: 7311686228579526430}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f98e7663599230e419addf153615c144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
