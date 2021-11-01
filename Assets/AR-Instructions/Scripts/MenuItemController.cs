@@ -39,7 +39,7 @@ public class MenuItemController : MonoBehaviour
     public void SetMode(bool editMode)
     {
         RemoveButton.SetActive(editMode);
-        Label.text = editMode ? "Edit" : "Select";
+        Label.text = editMode ? "Editieren" : "Auswählen";
         EditMode = editMode;
     }
 
