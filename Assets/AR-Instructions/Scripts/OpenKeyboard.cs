@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.MixedReality.Toolkit.Experimental.UI;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,7 +7,7 @@ using UnityEngine.Events;
 public class OpenKeyboard : MonoBehaviour
 {
     // For System Keyboard
-    public TouchScreenKeyboard keyboard;
+    public MixedRealityKeyboard keyboard;
     public static string keyboardText = "";
     public TextMeshPro TextOutPut;
 
@@ -17,26 +18,33 @@ public class OpenKeyboard : MonoBehaviour
     {
         if (keyboard != null)
         {
-            keyboardText = keyboard.text;
-            if (!TouchScreenKeyboard.visible)
-            {
-                TextTyped.Invoke(keyboardText);
-                keyboard = null;
-            }
-            else
-            {
-                if (TextOutPut != null)
-                {
-                    TextOutPut.text = "Anweisung:" + Environment.NewLine + keyboardText;
-                }
-            }
+            keyboardText = keyboard.Text;
         }
+
+        //if (keyboard != null)
+        //{
+        //    keyboardText = keyboard.Text;
+        //    if (!keyboard.Visible)
+        //    {
+        //        TextTyped.Invoke(keyboardText);
+        //        keyboard = null;
+        //    }
+        //    else
+        //    {
+        //        if (TextOutPut != null)
+        //        {
+        //            TextOutPut.text = "Anweisung:" + Environment.NewLine + keyboardText;
+        //        }
+        //    }
+        //}
     }
 #endif
 
     public void OpenSystemKeyboard()
     {
-        keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, false, false);
+        keyboard = new MixedRealityKeyboard();
+        keyboard.OnCommitText.AddListener(() => { TextTyped.Invoke(keyboardText); });
+        keyboard.OnHideKeyboard.AddListener(() => { TextOutPut.text = "Anweisung:" + Environment.NewLine + keyboardText; });
     }
 }
 

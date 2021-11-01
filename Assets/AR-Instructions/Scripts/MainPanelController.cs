@@ -176,7 +176,7 @@ public class MainPanelController : MonoBehaviour
             _instructionManager.AddStep();
 
             PhotoVideoPanelController.Reset(_instructionManager.GetCurrentMediaFiles());
-            InstructionText.text = "Description:";
+            InstructionText.text = "Beschreibung:";
         }
         else
         {
@@ -254,11 +254,11 @@ public class MainPanelController : MonoBehaviour
         
         if (!String.IsNullOrEmpty(instruction))
         {
-            InstructionText.text = "Description:" + Environment.NewLine + instruction;
+            InstructionText.text = "Beschreibung:" + Environment.NewLine + instruction;
         }
         else
         {
-            InstructionText.text = "Description: ";
+            InstructionText.text = "Beschreibung: ";
         }
     }
 
@@ -362,7 +362,7 @@ public class MainPanelController : MonoBehaviour
 
     private void SetStepCounterText()
     {
-        StepCounterText.text = $"Step: {_instructionManager.CurrentStepNumber + 1}/{_instructionManager.StepsCount}";
+        StepCounterText.text = $"Schritt: {_instructionManager.CurrentStepNumber + 1}/{_instructionManager.StepsCount}";
     }
 
     private void NewText(string text)

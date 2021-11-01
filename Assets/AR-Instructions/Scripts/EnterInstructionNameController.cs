@@ -34,7 +34,7 @@ public class EnterInstructionNameController : MonoBehaviour
     {
         if (keyboard != null)
         {
-            keyboardText = keyboard.text;
+            keyboardText = keyboard.Text;
             OutputTextMesh.text = "Name: " + keyboardText;
             
         //    if(keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
