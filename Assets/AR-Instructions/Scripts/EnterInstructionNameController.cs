@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
+﻿using Microsoft.MixedReality.Toolkit.Experimental.UI;
+using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using TMPro;
 using UnityEngine;
@@ -7,8 +8,8 @@ public class EnterInstructionNameController : MonoBehaviour
 {
     public event EventHandler Continue;
 
-    // For System Keyboard
-    public TouchScreenKeyboard keyboard;
+    
+    public MixedRealityKeyboard keyboard;
     public string keyboardText = "";
     public TextMeshPro OutputTextMesh;
 
@@ -19,7 +20,7 @@ public class EnterInstructionNameController : MonoBehaviour
     {
         _continueButton = GetComponentInChildren<Interactable>();
 
-        OpenSystemKeyboard();
+        OpenKeyboard();
 
 #if UNITY_EDITOR
         OutputTextMesh.text = "Name: EDITOR-" + DateTime.Now.ToString("yyyy.MM.dd hh-mm");
@@ -36,18 +37,21 @@ public class EnterInstructionNameController : MonoBehaviour
             keyboardText = keyboard.text;
             OutputTextMesh.text = "Name: " + keyboardText;
             
-            if(keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
-            {
-                _continueButton.IsEnabled = true;
-                keyboard = null;
-            }
+        //    if(keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
+        //    {
+        //        _continueButton.IsEnabled = true;
+        //        keyboard = null;
+        //    }
         }
     }
 #endif
 
-    public void OpenSystemKeyboard()
+    public void OpenKeyboard()
     {
-        keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, false, false);
+        keyboard = new MixedRealityKeyboard();
+        keyboard.ShowKeyboard();
+        keyboard.OnCommitText.AddListener(() => { _continueButton.IsEnabled = true; });
+        keyboard.OnHideKeyboard.AddListener(() => { _continueButton.IsEnabled = true; });
     }
 
     public void OnContinue()
