@@ -846,7 +846,7 @@ PrefabInstance:
     - target: {fileID: 1434442888796025212, guid: d4b13765e13706b4c89fd5161fdfc2fe,
         type: 3}
       propertyPath: m_text
-      value: "Geben Sie einen Namen f\xFCr die Anleitung ein."
+      value: "Geben Sie einen Namen f\xFCr die \nAnleitung ein."
       objectReference: {fileID: 0}
     - target: {fileID: 1434442888796025212, guid: d4b13765e13706b4c89fd5161fdfc2fe,
         type: 3}
@@ -936,7 +936,7 @@ PrefabInstance:
     - target: {fileID: 1434442890282309051, guid: d4b13765e13706b4c89fd5161fdfc2fe,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.28328612
+      value: 0.27758074
       objectReference: {fileID: 0}
     - target: {fileID: 1434442890282309051, guid: d4b13765e13706b4c89fd5161fdfc2fe,
         type: 3}
@@ -946,7 +946,7 @@ PrefabInstance:
     - target: {fileID: 1434442890282309051, guid: d4b13765e13706b4c89fd5161fdfc2fe,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.04794
+      value: -0.05079
       objectReference: {fileID: 0}
     - target: {fileID: 1434442890482218964, guid: d4b13765e13706b4c89fd5161fdfc2fe,
         type: 3}
@@ -1097,7 +1097,7 @@ PrefabInstance:
     - target: {fileID: 2204069623020599746, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.0021
       objectReference: {fileID: 0}
     - target: {fileID: 2204069623020599746, guid: 3f1f46cbecbe08e46a303ccfdb5b498a,
         type: 3}

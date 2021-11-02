@@ -617,7 +617,7 @@ PlayerSettings:
   metroSplashScreenUseBackgroundColor: 0
   platformCapabilities:
     WindowsStoreApps:
-      EnterpriseAuthentication: False
+      CodeGeneration: False
       OfflineMapsManagement: False
       HumanInterfaceDevice: False
       Location: False
@@ -644,7 +644,7 @@ PlayerSettings:
       RemovableStorage: False
       WebCam: True
       VoipCall: False
-      GazeInput: True
+      GazeInput: False
       UserAccountInformation: False
       UserNotificationListener: False
       PhoneCallHistoryPublic: False
@@ -653,8 +653,8 @@ PlayerSettings:
       Contacts: False
       Proximity: False
       InternetClient: True
-      CodeGeneration: False
       BackgroundMediaPlayback: False
+      EnterpriseAuthentication: False
   metroTargetDeviceFamilies:
     Desktop: False
     Holographic: False

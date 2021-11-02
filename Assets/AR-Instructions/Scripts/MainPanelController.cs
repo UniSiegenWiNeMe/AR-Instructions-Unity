@@ -104,6 +104,7 @@ public class MainPanelController : MonoBehaviour
         }
         else
         {
+            InstructionText.interactable = false;
             InsertTextButton.SetActive(false);
             ExportButton.SetActive(false);
             HomeButton.SetActive(false);
@@ -251,19 +252,30 @@ public class MainPanelController : MonoBehaviour
     public void SetInstructionText(string instruction = null)
     {
         
-        if (!String.IsNullOrEmpty(instruction))
-        {
-            InstructionText.text = instruction;
-
-            //if (_mode == MenuMode.Record)
-            //{
-            //    NewText(instruction);
-            //}
-        }
-        else
+        if (string.IsNullOrEmpty(instruction) || string.IsNullOrWhiteSpace(instruction))
         {
             InstructionText.text = "";
         }
+        else
+        {
+            InstructionText.text = instruction;
+        }
+
+        if (_mode == MenuMode.Replay)
+        {
+            InstructionText.placeholder.enabled = false;
+        }
+        //if (!String.IsNullOrEmpty(instruction))
+        //{
+        //    InstructionText.placeholder.enabled = true;
+        //    InstructionText.text = instruction;
+
+        //}
+        //else
+        //{
+        //    InstructionText.placeholder.enabled = _mode == MenuMode.Record ? true: false;
+        //    InstructionText.text = _mode == MenuMode.Record ? "" : " ";
+        //}
 
     }
 
@@ -373,6 +385,7 @@ public class MainPanelController : MonoBehaviour
     public void NewText(string text)
     {
         _instructionManager.CurrentInstructionText = text;
+        _instructionManager.Save();
         OnNewData?.Invoke();
     }
 }
