@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: AR-Instructions-UserTest
+  companyName: Mittelstand 4.0-Kompetenzzentrum Siegen
+  productName: AR-Instructions
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -134,7 +134,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.0
+  bundleVersion: 1.1
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -593,16 +593,16 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: AR-Instructions-UserTest
+  metroPackageName: AR-Instructions
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: Mittelstand40KompetenzzentrumSiegen
   metroCertificateIssuer: Mittelstand40KompetenzzentrumSiegen
   metroCertificateNotAfter: 006b8ff734ead801
-  metroApplicationDescription: AR-Instructions-UserTest
+  metroApplicationDescription: AR-Instructions
   wsaImages: {}
-  metroTileShortName: AR-Instructions-UserTest
+  metroTileShortName: AR-Instructions
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0
@@ -617,7 +617,7 @@ PlayerSettings:
   metroSplashScreenUseBackgroundColor: 0
   platformCapabilities:
     WindowsStoreApps:
-      CodeGeneration: False
+      EnterpriseAuthentication: False
       OfflineMapsManagement: False
       HumanInterfaceDevice: False
       Location: False
@@ -626,8 +626,8 @@ PlayerSettings:
       AllJoyn: False
       MusicLibrary: False
       LowLevelDevices: False
-      PrivateNetworkClientServer: True
-      InternetClientServer: True
+      PrivateNetworkClientServer: False
+      InternetClientServer: False
       VideosLibrary: False
       Objects3D: False
       RemoteSystem: False
@@ -644,17 +644,17 @@ PlayerSettings:
       RemovableStorage: False
       WebCam: True
       VoipCall: False
-      GazeInput: True
+      GazeInput: False
       UserAccountInformation: False
       UserNotificationListener: False
       PhoneCallHistoryPublic: False
       PointOfService: False
       RecordedCallsFolder: False
       Contacts: False
-      Proximity: False
       InternetClient: True
+      CodeGeneration: False
       BackgroundMediaPlayback: False
-      EnterpriseAuthentication: False
+      Proximity: False
   metroTargetDeviceFamilies:
     Desktop: False
     Holographic: False
