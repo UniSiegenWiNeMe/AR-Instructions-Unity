@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
+﻿using Microsoft.MixedReality.Toolkit.Experimental.UI;
+using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ public class MainPanelController : MonoBehaviour
     /// <summary>
     /// Text label where the instruction text is displayed
     /// </summary>
-    public TextMeshProUGUI InstructionText;
+    public MRTKTMPInputField InstructionText;
 
     /// <summary>
     /// Gameobject to the next step button
@@ -175,7 +176,7 @@ public class MainPanelController : MonoBehaviour
             _instructionManager.AddStep();
 
             PhotoVideoPanelController.Reset(_instructionManager.GetCurrentMediaFiles());
-            InstructionText.text = "Beschreibung:";
+            InstructionText.text = string.Empty;
         }
         else
         {
@@ -254,10 +255,10 @@ public class MainPanelController : MonoBehaviour
         {
             InstructionText.text = instruction;
 
-            if (_mode == MenuMode.Record)
-            {
-                NewText(instruction);
-            }
+            //if (_mode == MenuMode.Record)
+            //{
+            //    NewText(instruction);
+            //}
         }
         else
         {
@@ -369,7 +370,7 @@ public class MainPanelController : MonoBehaviour
         StepCounterText.text = $"Schritt: {_instructionManager.CurrentStepNumber + 1}/{_instructionManager.StepsCount}";
     }
 
-    private void NewText(string text)
+    public void NewText(string text)
     {
         _instructionManager.CurrentInstructionText = text;
         OnNewData?.Invoke();
