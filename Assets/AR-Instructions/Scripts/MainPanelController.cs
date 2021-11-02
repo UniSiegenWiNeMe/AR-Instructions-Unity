@@ -17,7 +17,7 @@ public class MainPanelController : MonoBehaviour
     /// <summary>
     /// Text label where the instruction text is displayed
     /// </summary>
-    public TextMeshPro InstructionText;
+    public TextMeshProUGUI InstructionText;
 
     /// <summary>
     /// Gameobject to the next step button
@@ -100,7 +100,6 @@ public class MainPanelController : MonoBehaviour
 
             NextStepButton.SetActive(true);
             HomeButton.SetActive(false);
-            Keyboard.TextTyped.AddListener(NewText);
         }
         else
         {
@@ -206,7 +205,6 @@ public class MainPanelController : MonoBehaviour
 
         NextStepButton.SetActive(true);
         PreviousStepButton.SetActive(false);
-        Keyboard.TextTyped.AddListener(NewText);
     }
 
     public void PreviousStep()
@@ -249,17 +247,23 @@ public class MainPanelController : MonoBehaviour
         }
     }
 
-    private void SetInstructionText(string instruction = null)
+    public void SetInstructionText(string instruction = null)
     {
         
         if (!String.IsNullOrEmpty(instruction))
         {
-            InstructionText.text = "Beschreibung:" + Environment.NewLine + instruction;
+            InstructionText.text = instruction;
+
+            if (_mode == MenuMode.Record)
+            {
+                NewText(instruction);
+            }
         }
         else
         {
-            InstructionText.text = "Beschreibung: ";
+            InstructionText.text = "";
         }
+
     }
 
     private void LoadItem(Item item)

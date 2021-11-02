@@ -9,8 +9,7 @@ public class EnterInstructionNameController : MonoBehaviour
     public event EventHandler Continue;
 
     
-    public MixedRealityKeyboard keyboard;
-    public string keyboardText = "";
+    public string InstructionName;
     public TextMeshPro OutputTextMesh;
 
     private Interactable _continueButton;
@@ -20,43 +19,31 @@ public class EnterInstructionNameController : MonoBehaviour
     {
         _continueButton = GetComponentInChildren<Interactable>();
 
-        OpenKeyboard();
 
 #if UNITY_EDITOR
         OutputTextMesh.text = "Name: EDITOR-" + DateTime.Now.ToString("yyyy.MM.dd hh-mm");
-        keyboardText = "EDITOR-" + DateTime.Now.ToString("yyyy.MM.dd hh-mm");
+        InstructionName = "EDITOR-" + DateTime.Now.ToString("yyyy.MM.dd hh-mm");
         _continueButton.IsEnabled = true;
 #endif
     }
 
-#if UNITY_WSA && !UNITY_EDITOR
-    private void Update()
-    {
-        if (keyboard != null)
-        {
-            keyboardText = keyboard.Text;
-            OutputTextMesh.text = "Name: " + keyboardText;
-            
-        //    if(keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
-        //    {
-        //        _continueButton.IsEnabled = true;
-        //        keyboard = null;
-        //    }
-        }
-    }
-#endif
 
-    public void OpenKeyboard()
+    public void SetInstructionName(string name)
     {
-        keyboard = new MixedRealityKeyboard();
-        keyboard.ShowKeyboard();
-        keyboard.OnCommitText.AddListener(() => { _continueButton.IsEnabled = true; });
-        keyboard.OnHideKeyboard.AddListener(() => { _continueButton.IsEnabled = true; });
+        InstructionName = name;
     }
+
+    //public void OpenKeyboard()
+    //{
+    //    keyboard = new MixedRealityKeyboard();
+    //    keyboard.ShowKeyboard();
+    //    keyboard.OnCommitText.AddListener(() => { _continueButton.IsEnabled = true; });
+    //    keyboard.OnHideKeyboard.AddListener(() => { _continueButton.IsEnabled = true; keyboard = null; });
+    //}
 
     public void OnContinue()
     {
-        InstructionManager.Instance.CreateNewInstruction(keyboardText, DateTime.Now);
+        InstructionManager.Instance.CreateNewInstruction(InstructionName, DateTime.Now);
 
         Continue?.Invoke(this, null);
     }

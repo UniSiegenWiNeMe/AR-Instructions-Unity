@@ -120,7 +120,7 @@ public class GUIManager : MonoBehaviour
 
     private void EnterName_Continue(object sender, EventArgs e)
     {
-        var tmp = _enterName.GetComponent<EnterInstructionNameController>().keyboardText;
+        var tmp = _enterName.GetComponent<EnterInstructionNameController>().InstructionName;
         ShowInstructionMenu(MenuMode.Record);
 
         _enterName.GetComponent<EnterInstructionNameController>().Continue -= EnterName_Continue;
