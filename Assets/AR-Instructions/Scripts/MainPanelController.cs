@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit.UI;
+﻿using Microsoft.MixedReality.Toolkit.Experimental.UI;
+using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ public class MainPanelController : MonoBehaviour
     /// <summary>
     /// Text label where the instruction text is displayed
     /// </summary>
-    public TextMeshPro InstructionText;
+    public MRTKTMPInputField InstructionText;
 
     /// <summary>
     /// Gameobject to the next step button
@@ -67,7 +68,7 @@ public class MainPanelController : MonoBehaviour
 
     public void Start()
     {
-        HomeButton.GetComponent<Interactable>().OnClick.AddListener(() => HomeButtonClicked?.Invoke());
+        //HomeButton.GetComponent<Interactable>().OnClick.AddListener(() => HomeButtonClicked?.Invoke());
     }
     public void OnDestroy()
     {
@@ -100,10 +101,10 @@ public class MainPanelController : MonoBehaviour
 
             NextStepButton.SetActive(true);
             HomeButton.SetActive(false);
-            Keyboard.TextTyped.AddListener(NewText);
         }
         else
         {
+            InstructionText.interactable = false;
             InsertTextButton.SetActive(false);
             ExportButton.SetActive(false);
             HomeButton.SetActive(false);
@@ -116,6 +117,8 @@ public class MainPanelController : MonoBehaviour
             }
         }
         PreviousStepButton.SetActive(false);
+
+        HomeButton.GetComponent<Interactable>().OnClick.AddListener(() => HomeButtonClicked?.Invoke());
     }
 
     //public void Init(MenuMode mode, GameObject ContainerForSpawnedItems, string InstructionName = null)
@@ -174,7 +177,7 @@ public class MainPanelController : MonoBehaviour
             _instructionManager.AddStep();
 
             PhotoVideoPanelController.Reset(_instructionManager.GetCurrentMediaFiles());
-            InstructionText.text = "Description:";
+            InstructionText.text = string.Empty;
         }
         else
         {
@@ -204,7 +207,6 @@ public class MainPanelController : MonoBehaviour
 
         NextStepButton.SetActive(true);
         PreviousStepButton.SetActive(false);
-        Keyboard.TextTyped.AddListener(NewText);
     }
 
     public void PreviousStep()
@@ -247,17 +249,34 @@ public class MainPanelController : MonoBehaviour
         }
     }
 
-    private void SetInstructionText(string instruction = null)
+    public void SetInstructionText(string instruction = null)
     {
         
-        if (!String.IsNullOrEmpty(instruction))
+        if (string.IsNullOrEmpty(instruction) || string.IsNullOrWhiteSpace(instruction))
         {
-            InstructionText.text = "Description:" + Environment.NewLine + instruction;
+            InstructionText.text = "";
         }
         else
         {
-            InstructionText.text = "Description: ";
+            InstructionText.text = instruction;
         }
+
+        if (_mode == MenuMode.Replay)
+        {
+            InstructionText.placeholder.enabled = false;
+        }
+        //if (!String.IsNullOrEmpty(instruction))
+        //{
+        //    InstructionText.placeholder.enabled = true;
+        //    InstructionText.text = instruction;
+
+        //}
+        //else
+        //{
+        //    InstructionText.placeholder.enabled = _mode == MenuMode.Record ? true: false;
+        //    InstructionText.text = _mode == MenuMode.Record ? "" : " ";
+        //}
+
     }
 
     private void LoadItem(Item item)
@@ -360,12 +379,13 @@ public class MainPanelController : MonoBehaviour
 
     private void SetStepCounterText()
     {
-        StepCounterText.text = $"Step: {_instructionManager.CurrentStepNumber + 1}/{_instructionManager.StepsCount}";
+        StepCounterText.text = $"Schritt: {_instructionManager.CurrentStepNumber + 1}/{_instructionManager.StepsCount}";
     }
 
-    private void NewText(string text)
+    public void NewText(string text)
     {
         _instructionManager.CurrentInstructionText = text;
+        _instructionManager.Save();
         OnNewData?.Invoke();
     }
 }

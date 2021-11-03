@@ -27,16 +27,16 @@ public class VideoPlaybackController : MonoBehaviour
         switch (State)
         {
             case VideoPlayerState.Playing:
-                InstructionManager.Instance.ActionLog.Add(new ActionLogEntry(InstructionManager.Instance.CurrentStepNumber, ActionType.VideoPaused, DateTime.Now));
+                //InstructionManager.Instance.ActionLog.Add(new ActionLogEntry(InstructionManager.Instance.CurrentStepNumber, ActionType.VideoPaused, DateTime.Now));
                 VideoPlayer.Pause();
                 State = VideoPlayerState.Paused;
                 break;
             case VideoPlayerState.Paused:
             case VideoPlayerState.Stopped:
             case VideoPlayerState.NotStarted:
-                if (State == VideoPlayerState.Paused) InstructionManager.Instance.ActionLog.Add(new ActionLogEntry(InstructionManager.Instance.CurrentStepNumber, ActionType.VideoUnpaused, DateTime.Now));
-                if (State == VideoPlayerState.Stopped) InstructionManager.Instance.ActionLog.Add(new ActionLogEntry(InstructionManager.Instance.CurrentStepNumber, ActionType.VideoRestarted, DateTime.Now));
-                if (State == VideoPlayerState.NotStarted) InstructionManager.Instance.ActionLog.Add(new ActionLogEntry(InstructionManager.Instance.CurrentStepNumber, ActionType.VideoStarted, DateTime.Now));
+                //    if (State == VideoPlayerState.Paused) InstructionManager.Instance.ActionLog.Add(new ActionLogEntry(InstructionManager.Instance.CurrentStepNumber, ActionType.VideoUnpaused, DateTime.Now));
+                //    if (State == VideoPlayerState.Stopped) InstructionManager.Instance.ActionLog.Add(new ActionLogEntry(InstructionManager.Instance.CurrentStepNumber, ActionType.VideoRestarted, DateTime.Now));
+                //    if (State == VideoPlayerState.NotStarted) InstructionManager.Instance.ActionLog.Add(new ActionLogEntry(InstructionManager.Instance.CurrentStepNumber, ActionType.VideoStarted, DateTime.Now));
 
                 VideoPlayer.Play();
                 State = VideoPlayerState.Playing;

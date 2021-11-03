@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class InstructionManager : Singleton<InstructionManager>
 {
-    public ActionLog ActionLog = new ActionLog();
+    //public ActionLog ActionLog = new ActionLog();
 
     public event EventHandler ImportCompleted;
 
@@ -54,7 +54,7 @@ public class InstructionManager : Singleton<InstructionManager>
     public void SelectInstruction(Instruction instruction)
     {
         this.Instruction = instruction;
-        ActionLog.Add(new ActionLogEntry(-1, ActionType.InstructionStarted, DateTime.Now));
+        //ActionLog.Add(new ActionLogEntry(-1, ActionType.InstructionStarted, DateTime.Now));
     }
 
     /// <summary>
@@ -280,7 +280,7 @@ public class InstructionManager : Singleton<InstructionManager>
     /// <returns>false if there is no next step</returns>
     internal bool StepForward()
     {
-        ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.StepForward, DateTime.Now));
+        //ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.StepForward, DateTime.Now));
         if (CurrentStepNumber + 1 < StepsCount)
         {
             CurrentStepNumber++;
@@ -315,7 +315,7 @@ public class InstructionManager : Singleton<InstructionManager>
     /// <returns></returns>
     internal bool StepBack()
     {
-        ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.StepBackward, DateTime.Now));
+        //ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.StepBackward, DateTime.Now));
         if (CurrentStepNumber - 1 >= 0)
         {
             CurrentStepNumber--;
@@ -349,9 +349,9 @@ public class InstructionManager : Singleton<InstructionManager>
 
     public void Reset()
     {
-        ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.InstructionCompleted, DateTime.Now));
+        //ActionLog.Add(new ActionLogEntry(CurrentStepNumber, ActionType.InstructionCompleted, DateTime.Now));
         Instruction = null;
-        ActionLog.Export();
+        //ActionLog.Export();
         CurrentStepNumber = 0;
         _toolTipTextCounter = 1;
     }
